@@ -1,15 +1,25 @@
 TITLE high threshold calcium current (L-current)
 
-: From ModelDB, accession: 3808
+: 2019: From ModelDB, accession: 3808
 : Based on the model by McCormick & Huguenard, J Neurophysiol, 1992
 : and errata in https://huguenardlab.stanford.edu/reprints/Errata_thalamic_cell_models.pdf
+: Modified cai by Elisabetta Iavarone @ Blue Brain Project
+: See PARAMETER section for references 
 
 INDEPENDENT {t FROM 0 TO 1 WITH 1 (ms)}
 
 NEURON {
 	SUFFIX TC_iL
-	USEION ca READ cai,cao WRITE ica
-        RANGE pcabar, m_inf, tau_m, ica, i_rec
+	USEION cal1 READ cal1i,cal1o WRITE ical1
+        USEION cal2 READ cal2i,cal2o WRITE ical2
+        :USEION cal3 READ cal3i,cal3o WRITE ical3
+        :RANGE pcabar1, pcabar2, pcabar3, m_inf, tau_m
+        RANGE pcabar1, pcabar2, m_inf, tau_m
+        GLOBAL beta
+
+
+
+        RANGE output, i_output
 }
 
 UNITS {
@@ -25,9 +35,16 @@ PARAMETER {
 	v			(mV)
 	celsius			(degC)
         dt              	(ms)
-	cai  = 0.5E-4    	(mM)
-	cao  = 2		(mM)
-	pcabar= 1e-4	        (cm/s)		
+	cal1i  = 0.5E-4    	(mM) : Value from Amarillo et al., J Neurophysiol, 2014
+	cal1o  = 2		(mM)
+	cal2i  = 0.5E-4    	(mM) : Value from Amarillo et al., J Neurophysiol, 2014
+	cal2o  = 2		(mM)
+	:cal3i  = 0.5E-4    	(mM) : Value from Amarillo et al., J Neurophysiol, 2014
+	:cal3o  = 2		(mM)
+	pcabar1= 1e-4	        (cm/s)
+	pcabar2= 1e-4	        (cm/s)
+	:pcabar3= 1e-4	        (cm/s)
+        beta  = 1
 }
 
 STATE {
@@ -35,17 +52,35 @@ STATE {
 }
 
 ASSIGNED {
-	ica		(mA/cm2)
+	ical1		(mA/cm2)
+	ical2		(mA/cm2)
+	:ical3		(mA/cm2)
 	i_rec		(mA/cm2)	
 	tau_m		(ms)
 	m_inf 
 	tcorr
+
+
+
+        output
+        i_output
 }
 
 BREAKPOINT { 
 	SOLVE states METHOD cnexp
-	ica = pcabar * m*m * ghk(v,cai,cao)
-	i_rec = ica
+
+
+        :output   = (pcabar1+pcabar2+pcabar3)*m*m
+
+        output   = (pcabar1+pcabar2)*m*m
+
+        
+	ical1 = pcabar1 * m*m * ghk(v,cal1i,cal1o)
+	ical2 = pcabar2 * m*m * ghk(v,cal2i,cal2o)
+	:ical3 = pcabar3 * m*m * ghk(v,cal3i,cal3o)
+	
+        :i_output =ical1+ical2+ical3
+        i_output =ical1+ical2
 }
 
 DERIVATIVE states {
@@ -55,9 +90,21 @@ DERIVATIVE states {
 }
   
 INITIAL {
-	rates(v)
 	tcorr = 3^((celsius-23.5)/10)
-	m = 0
+	rates(v)
+	m = m_inf
+
+
+
+        :output   = (pcabar1+pcabar2+pcabar3)*m*m
+        output   = (pcabar1+pcabar2)*m*m
+        
+	ical1 = pcabar1 * m*m * ghk(v,cal1i,cal1o)
+	ical2 = pcabar2 * m*m * ghk(v,cal2i,cal2o)
+	:ical3 = pcabar3 * m*m * ghk(v,cal3i,cal3o)
+	
+        :i_output =ical1+ical2+ical3
+        i_output =ical1+ical2
 }
 
 UNITSOFF

@@ -24,15 +24,21 @@ TITLE Low threshold calcium current
 :   Written by Alain Destexhe, Laval University, 1995
 :
 
-: From ModelDB, accession no. 279, modified qm and qh
+: 2019: From ModelDB, accession no. 279
+: Modified qm and qh by Elisabetta Iavarone @ Blue Brain Project
+: See PARAMETER section for references
 
 INDEPENDENT {t FROM 0 TO 1 WITH 1 (ms)}
 
 NEURON {
 	SUFFIX TC_iT_Des98
-	USEION ca READ cai,cao WRITE ica
-	RANGE pcabar, m_inf, tau_m, h_inf, tau_h, shift, actshift, ica
-	GLOBAL qm, qh
+	USEION cat READ cati, cato WRITE icat
+	RANGE pcabar, m_inf, tau_m, h_inf, tau_h
+	GLOBAL qm, qh, km, kh, shift, actshift
+
+
+
+        RANGE output, i_output
 }
 
 UNITS {
@@ -52,10 +58,12 @@ PARAMETER {
 	pcabar	=.2e-3	(cm/s)	: Maximum Permeability
 	shift	= 2 	(mV)	: corresponds to 2mM ext Ca++
 	actshift = 0 	(mV)	: shift of activation curve (towards hyperpol)
-	cai	= 2.4e-4 (mM)	: adjusted for eca=120 mV
-	cao	= 2	(mM)
+	cati	= 2.4e-4 (mM)	: adjusted for eca2=120 mV
+	cato	= 2	(mM)
 	qm      = 2.5		: Amarillo et al., J Neurophysiol, 2014
 	qh      = 2.5           : Amarillo et al., J Neurophysiol, 2014
+        km      = 6.2
+        kh      = 4.0
 }
 
 STATE {
@@ -63,18 +71,30 @@ STATE {
 }
 
 ASSIGNED {
-	ica	(mA/cm2)
+	icat	(mA/cm2)
 	m_inf
 	tau_m	(ms)
 	h_inf
 	tau_h	(ms)
 	phi_m
 	phi_h
+
+
+
+
+        output
+        i_output
 }
 
 BREAKPOINT {
 	SOLVE castate METHOD cnexp
-	ica = pcabar * m*m*h * ghk(v, cai, cao)
+
+        
+        output   = pcabar*m*m*h
+        i_output = output*ghk(v, cati, cato)
+
+        
+	icat     = i_output
 }
 
 DERIVATIVE castate {
@@ -86,6 +106,7 @@ DERIVATIVE castate {
 
 
 UNITSOFF
+
 INITIAL {
 	phi_m = qm ^ ((celsius-24)/10)
 	phi_h = qh ^ ((celsius-24)/10)
@@ -94,6 +115,13 @@ INITIAL {
 
 	m = m_inf
 	h = h_inf
+
+
+        output   = pcabar*m*m*h
+        i_output = output*ghk(v, cati, cato)
+
+
+        icat     = i_output
 }
 
 PROCEDURE evaluate_fct(v(mV)) {
@@ -113,8 +141,8 @@ PROCEDURE evaluate_fct(v(mV)) {
 :   (cfr. Huguenard & McCormick, J Neurophysiol, 1992).
 :
 
-	m_inf = 1.0 / ( 1 + exp(-(v+shift+actshift+57)/6.2) )
-	h_inf = 1.0 / ( 1 + exp((v+shift+81)/4.0) )
+	m_inf = 1.0 / ( 1 + exp(-(v+shift+actshift+57)/km) )
+	h_inf = 1.0 / ( 1 + exp((v+shift+81)/kh) )
 
 	tau_m = ( 0.612 + 1.0 / ( exp(-(v+shift+actshift+132)/16.7) + exp((v+shift+actshift+16.8)/18.2) ) ) / phi_m
 	if( (v+shift) < -80) {
@@ -143,7 +171,7 @@ FUNCTION efun(z) {
 		efun = z/(exp(z) - 1)
 	}
 }
-FUNCTION nongat(v,cai,cao) {	: non gated current
-	nongat = pcabar * ghk(v, cai, cao)
+FUNCTION nongat(v,cati,cato) {	: non gated current
+	nongat = pcabar * ghk(v, cati, cato)
 }
 UNITSON

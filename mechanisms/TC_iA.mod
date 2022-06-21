@@ -1,7 +1,8 @@
 TITLE Fast Transient Potassium Current IA
 
-:   From the model by Huguenard and McCormick, J Neurophysiol, 1992
-:   Written by Yimy Amarillo, 2014 (Amarillo et al., J Neurophysiol, 2014)
+:   Huguenard and Prince, 1991
+:   The junction potential was considered
+
 
 UNITS {
     (mV) = (millivolt)
@@ -13,11 +14,18 @@ NEURON {
     SUFFIX TC_iA
     USEION k READ ek WRITE ik
     RANGE gk_max, ik, taom, taoh1, taoh2
+    RANGE shift
+
+
+
+    
+    RANGE output, i_output
 }
 
 PARAMETER {
     gk_max  = 5.5e-3 (S/cm2)	: Default maximum conductance
     celsius
+    shift   = 0 (mV)
 }
 
 ASSIGNED { 
@@ -31,6 +39,13 @@ ASSIGNED {
     taoh2 (ms)
     taom  (ms)
     tadj
+
+
+
+
+    
+    output
+    i_output
 }
 
 STATE {
@@ -39,16 +54,36 @@ STATE {
 
 BREAKPOINT {
     SOLVE states METHOD cnexp
-    ik = gk_max*(0.6*h1*m1^4+0.4*h2*m2^4)*(v-ek)
+
+
+    
+    
+    output   = gk_max * (0.6*h1*m1^4+0.4*h2*m2^4)
+    i_output = output*(v-ek)
+
+
+
+
+    ik = i_output
 }
 
 INITIAL {
-    settables(v)
     tadj = 2.8 ^ ((celsius-23)/10)
+    settables(v)
     m1 = m1inf
     m2 = m2inf
     h1 = hinf
     h2 = hinf
+
+
+    
+    output   = gk_max * (0.6*h1*m1^4+0.4*h2*m2^4)
+    i_output = output*(v-ek)
+
+
+
+
+    ik = i_output
 }
 
 DERIVATIVE states {  
@@ -64,15 +99,15 @@ UNITSOFF
 PROCEDURE settables(v (mV)) { 
     LOCAL taodef
 
-    m1inf = 1/(1+exp(-(v+60)/8.5))
-    m2inf = 1/(1+exp(-(v+36)/20))
-    hinf  = 1/(1+exp((v+78)/6))
+    m1inf = 1/(1+exp(-(v+60+shift)/8.5))
+    m2inf = 1/(1+exp(-(v+36+shift)/20))
+    hinf  = 1/(1+exp((v+78+shift)/6))
 
-    taom  = (0.37 + 1/(exp((v+35.8)/19.7)+exp(-(v+79.7)/12.7))) / tadj
+    taom  = (0.37 + 1/(exp((v+35.8+shift)/19.7)+exp(-(v+79.7+shift)/12.7))) / tadj
     
-    taodef = (1/(exp((v+46)/5)+exp(-(v+238)/37.5))) / tadj
-    if (v<(-63)) {taoh1 = taodef} else {taoh1 = (19 / tadj)}
-    if (v<(-73)) {taoh2 = taodef} else {taoh2 = (60 / tadj)}
+    taodef = (1/(exp((v+46+shift)/5)+exp(-(v+238+shift)/37.5))) / tadj
+    if (v<(-63-shift)) {taoh1 = taodef} else {taoh1 = (19 / tadj)}
+    if (v<(-73-shift)) {taoh2 = taodef} else {taoh2 = (60 / tadj)}
 
 }
 

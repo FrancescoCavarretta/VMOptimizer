@@ -1,10 +1,16 @@
-: Ih current for thalamo-cortical neurons
-: Ref.: Budde et al. (minf), J Physiol, 1997, Huguenard and McCormick, J Neurophysiol, 1992 (taum)
+: 2019: Ih current for thalamocortical neurons by Elisabetta Iavarone @ Blue Brain Project
+: References: Budde et al. (minf), J Physiol, 1997, Huguenard and McCormick, J Neurophysiol, 1992 (taum)
 
 NEURON	{
 	SUFFIX TC_ih_Bud97
 	NONSPECIFIC_CURRENT ih
-	RANGE gh_max, g_h, i_rec 
+	RANGE gh_max, g_h, i_rec
+        RANGE vhalf, k, a, b, tvhalf1, tvhalf2, mInf, m
+        GLOBAL shift
+
+
+        
+        RANGE i_output, output
 }
 
 UNITS	{
@@ -18,7 +24,13 @@ PARAMETER	{
 	e_h =  -43.0 (mV)
         celsius (degC)
 	q10 = 4 : Santoro et al., J. Neurosci. 2000
-		     
+        shift=0
+        vhalf=-86.4
+        k=11.2
+        a=0.086
+        b=0.0701
+        tvhalf1=-169.6511627906977
+        tvhalf2=26.67617689015692		     
 }
 
 ASSIGNED	{
@@ -29,6 +41,12 @@ ASSIGNED	{
 	mTau
 	tcorr		: Add temperature correction
 	i_rec
+
+
+
+
+        i_output
+        output
 }
 
 STATE	{ 
@@ -37,9 +55,14 @@ STATE	{
 
 BREAKPOINT	{
 	SOLVE states METHOD cnexp
-	g_h = gh_max*m
-	ih = g_h*(v-e_h)
-	i_rec = ih
+
+        
+        output     = gh_max*m
+        i_output   = output*(v-e_h)
+
+        
+	ih    = i_output
+	i_rec = i_output
 }
 
 DERIVATIVE states	{
@@ -48,14 +71,22 @@ DERIVATIVE states	{
 }
 
 INITIAL{
+  	tcorr = q10^((celsius-34)/10)  : EI: Recording temp. 34 C Huguenard et al.
 	rates()
 	m = mInf
-	tcorr = q10^((celsius-34)/10)  : EI: Recording temp. 34 C Huguenard et al.
+
+        
+        output     = gh_max*m
+        i_output   = output*(v-e_h)
+
+        
+	ih    = i_output
+	i_rec = i_output
 }
 
 UNITSOFF
 PROCEDURE rates(){
-        mInf = 1/(1+exp((v+86.4)/11.2)) : Budde et al., 1997
-        mTau = (1/(exp(-14.59 - 0.086*v) + exp(-1.87 + 0.0701*v )))/tcorr : Huguenard et al., 1992
+        mInf = 1/(1+exp((v-vhalf+shift)/k)) : Budde et al., 1997
+        mTau = (1/(exp(-(-tvhalf1 + v+shift)*a) + exp((-tvhalf2 + v+shift)*b )))/tcorr : Huguenard et al., 1992
 }
 UNITSON

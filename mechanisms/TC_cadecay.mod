@@ -1,9 +1,18 @@
-: From ModelDB no. 139653 
+: calcium microdomains
+: Francesco Cavarretta Aug. 19th 2020
 
 NEURON {
 	SUFFIX TC_cad
-	USEION ca READ ica WRITE cai
-	RANGE depth,kt,kd,cainf,taur, cai_rec, gamma
+        
+	USEION cal1 READ ical1 WRITE cal1i VALENCE 2
+        USEION cal2 READ ical2 WRITE cal2i VALENCE 2
+        :USEION cal3 READ ical3 WRITE cal3i VALENCE 2
+	USEION cat READ icat  WRITE cati  VALENCE 2
+        
+        :RANGE delta_L3, taur_L3, cal3_inf, delta_L1, taur_L1, cal1_inf,  delta_L2, taur_L2, cal2_inf,  delta_T, taur_T, cat_inf
+        RANGE delta_L1, taur_L1, cal1_inf,  delta_L2, taur_L2, cal2_inf,  delta_T, taur_T, cat_inf
+
+
 }
 
 UNITS {
@@ -16,23 +25,46 @@ UNITS {
 }
 
 PARAMETER {
-	depth	= .1	 (um)		: depth of shell
-	gamma   = 0.05 	 (1)		: EI: percent of free calcium (not buffered)
-	taur	= 5	 (ms)		: rate of calcium removal
-	cainf	= 5e-5 (mM)		: Value from Amarillo et al., J Neurophysiol, 2014
+	:depth	= .1	 (um)		: depth of shell
+	:gamma   = 0.05 	 (1)		: EI: percent of free calcium (not buffered)
+        
+        delta_L1   = 0.5    (/um)
+        taur_L1    = 5      (ms)  : rate of calcium removal
+        cal1_inf   = 5e-5   (mM)  : Value from Amarillo et al., J Neurophysiol, 2014
+		
+        delta_L2   = 0.5    (/um)
+        taur_L2    = 5      (ms)  : rate of calcium removal
+        cal2_inf   = 5e-5   (mM)  : Value from Amarillo et al., J Neurophysiol, 2014
+        
+        delta_T    = 0.5    (/um)
+        taur_T     = 5      (ms)  : rate of calcium removal
+        cat_inf    = 5e-5   (mM)  : Value from Amarillo et al., J Neurophysiol, 2014
+
+        :delta_L3   = 0.5    (/um)
+        :taur_L3    = 5      (ms)  : rate of calcium removal
+        :cal3_inf   = 5e-5   (mM)  : Value from Amarillo et al., J Neurophysiol, 2014
+
 }
 
 STATE {
-	cai		(mM) 
+	cal1i		(mM) 
+	cal2i		(mM) 
+	:cal3i		(mM) 
+	cati		(mM) 
 }
 
 INITIAL {
-	cai = cainf
+	cal1i = cal1_inf
+	cal2i = cal2_inf
+	cati  = cat_inf
+	:cal3i = cal3_inf
 }
 
 ASSIGNED {
-	ica		(mA/cm2)
-	cai_rec		(mM)
+	ical1		(mA/cm2)
+	ical2		(mA/cm2)
+	:ical3		(mA/cm2)
+	icat		(mA/cm2)
 }
 	
 BREAKPOINT {
@@ -40,11 +72,23 @@ BREAKPOINT {
 	
 }
 
-DERIVATIVE state { 
+DERIVATIVE state { LOCAL drive_channel
+        : delta = gamma/depth
+        drive_channel = -10000*(ical1 * delta_L1/(2*FARADAY))
+        if (drive_channel <= 0.) { drive_channel = 0. }	: cannot pump inward
+        cal1i' =  drive_channel - (cal1i-cal1_inf)/taur_L1
 
-	cai' = -(10000)*(ica*gamma/(2*FARADAY*depth)) - (cai - cainf)/taur
-	cai_rec = cai
+                   
+        drive_channel = -10000*(ical2 * delta_L2/(2*FARADAY))
+        if (drive_channel <= 0.) { drive_channel = 0. }	: cannot pump inward
+        cal2i' = drive_channel - (cal2i-cal2_inf)/taur_L2
 
+                   
+        drive_channel = -10000*(icat * delta_T/(2*FARADAY))
+        if (drive_channel <= 0.) { drive_channel = 0. }	: cannot pump inward
+        cati'  = drive_channel - (cati-cat_inf)/taur_T
+                   
+        :cal3i' = -10000*(ical3 * delta_L3/(2*FARADAY)) - (cal3i-cal3_inf)/taur_L3
 }
 
 

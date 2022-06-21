@@ -1,13 +1,17 @@
 : SK-type calcium-activated potassium current
 : Reference : Kohler et al. 1996
 
-: From ModelDB, accession no. 139653
+: 2019: From ModelDB, accession no. 139653
 
 NEURON {
        SUFFIX SK_E2
        USEION k READ ek WRITE ik
-       USEION ca READ cai
+	USEION cal1 READ cal1i VALENCE 2
        RANGE gSK_E2bar, gSK_E2, ik, zTau
+
+
+
+       RANGE i_output, output
 }
 
 UNITS {
@@ -21,13 +25,18 @@ PARAMETER {
           gSK_E2bar = .000001 (mho/cm2)
           zTau = 1              (ms)
           ek           (mV)
-          cai          (mM)
+          cal1i          (mM)
 }
 
 ASSIGNED {
          zInf
          ik            (mA/cm2)
          gSK_E2	       (S/cm2)
+
+
+         
+         i_output
+         output
 }
 
 STATE {
@@ -36,12 +45,21 @@ STATE {
 
 BREAKPOINT {
            SOLVE states METHOD cnexp
-           gSK_E2  = gSK_E2bar * z
-           ik   =  gSK_E2 * (v - ek)
+
+
+           
+        output   = gSK_E2bar*z
+        i_output = output*(v - ek)
+
+
+
+           
+           gSK_E2  = output
+           ik   =  i_output
 }
 
 DERIVATIVE states {
-        rates(cai)
+        rates(cal1i)
         z' = (zInf - z) / zTau
 }
 
@@ -53,6 +71,17 @@ PROCEDURE rates(ca(mM)) {
 }
 
 INITIAL {
-        rates(cai)
+        rates(cal1i)
         z = zInf
+
+
+
+        output   = gSK_E2bar*z
+        i_output = output*(v - ek)
+
+
+
+           
+           gSK_E2  = output
+           ik   =  i_output
 }
