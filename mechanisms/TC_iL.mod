@@ -12,8 +12,6 @@ NEURON {
 	SUFFIX TC_iL
 	USEION cal1 READ cal1i,cal1o WRITE ical1
         USEION cal2 READ cal2i,cal2o WRITE ical2
-        :USEION cal3 READ cal3i,cal3o WRITE ical3
-        :RANGE pcabar1, pcabar2, pcabar3, m_inf, tau_m
         RANGE pcabar1, pcabar2, m_inf, tau_m
         GLOBAL beta
 
@@ -39,11 +37,8 @@ PARAMETER {
 	cal1o  = 2		(mM)
 	cal2i  = 0.5E-4    	(mM) : Value from Amarillo et al., J Neurophysiol, 2014
 	cal2o  = 2		(mM)
-	:cal3i  = 0.5E-4    	(mM) : Value from Amarillo et al., J Neurophysiol, 2014
-	:cal3o  = 2		(mM)
 	pcabar1= 1e-4	        (cm/s)
 	pcabar2= 1e-4	        (cm/s)
-	:pcabar3= 1e-4	        (cm/s)
         beta  = 1
 }
 
@@ -53,9 +48,7 @@ STATE {
 
 ASSIGNED {
 	ical1		(mA/cm2)
-	ical2		(mA/cm2)
-	:ical3		(mA/cm2)
-	i_rec		(mA/cm2)	
+	ical2		(mA/cm2)	
 	tau_m		(ms)
 	m_inf 
 	tcorr
@@ -69,17 +62,12 @@ ASSIGNED {
 BREAKPOINT { 
 	SOLVE states METHOD cnexp
 
-
-        :output   = (pcabar1+pcabar2+pcabar3)*m*m
-
         output   = (pcabar1+pcabar2)*m*m
 
         
 	ical1 = pcabar1 * m*m * ghk(v,cal1i,cal1o)
 	ical2 = pcabar2 * m*m * ghk(v,cal2i,cal2o)
-	:ical3 = pcabar3 * m*m * ghk(v,cal3i,cal3o)
-	
-        :i_output =ical1+ical2+ical3
+        
         i_output =ical1+ical2
 }
 
@@ -94,16 +82,11 @@ INITIAL {
 	rates(v)
 	m = m_inf
 
-
-
-        :output   = (pcabar1+pcabar2+pcabar3)*m*m
         output   = (pcabar1+pcabar2)*m*m
         
 	ical1 = pcabar1 * m*m * ghk(v,cal1i,cal1o)
 	ical2 = pcabar2 * m*m * ghk(v,cal2i,cal2o)
-	:ical3 = pcabar3 * m*m * ghk(v,cal3i,cal3o)
-	
-        :i_output =ical1+ical2+ical3
+        
         i_output =ical1+ical2
 }
 
