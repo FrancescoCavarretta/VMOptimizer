@@ -6,10 +6,8 @@ NEURON {
         
 	USEION cal1 READ ical1 WRITE cal1i VALENCE 2
         USEION cal2 READ ical2 WRITE cal2i VALENCE 2
-        :USEION cal3 READ ical3 WRITE cal3i VALENCE 2
 	USEION cat READ icat  WRITE cati  VALENCE 2
         
-        :RANGE delta_L3, taur_L3, cal3_inf, delta_L1, taur_L1, cal1_inf,  delta_L2, taur_L2, cal2_inf,  delta_T, taur_T, cat_inf
         RANGE delta_L1, taur_L1, cal1_inf,  delta_L2, taur_L2, cal2_inf,  delta_T, taur_T, cat_inf
 
 
@@ -40,16 +38,12 @@ PARAMETER {
         taur_T     = 5      (ms)  : rate of calcium removal
         cat_inf    = 5e-5   (mM)  : Value from Amarillo et al., J Neurophysiol, 2014
 
-        :delta_L3   = 0.5    (/um)
-        :taur_L3    = 5      (ms)  : rate of calcium removal
-        :cal3_inf   = 5e-5   (mM)  : Value from Amarillo et al., J Neurophysiol, 2014
 
 }
 
 STATE {
 	cal1i		(mM) 
 	cal2i		(mM) 
-	:cal3i		(mM) 
 	cati		(mM) 
 }
 
@@ -57,13 +51,11 @@ INITIAL {
 	cal1i = cal1_inf
 	cal2i = cal2_inf
 	cati  = cat_inf
-	:cal3i = cal3_inf
 }
 
 ASSIGNED {
 	ical1		(mA/cm2)
 	ical2		(mA/cm2)
-	:ical3		(mA/cm2)
 	icat		(mA/cm2)
 }
 	
@@ -88,7 +80,6 @@ DERIVATIVE state { LOCAL drive_channel
         if (drive_channel <= 0.) { drive_channel = 0. }	: cannot pump inward
         cati'  = drive_channel - (cati-cat_inf)/taur_T
                    
-        :cal3i' = -10000*(ical3 * delta_L3/(2*FARADAY)) - (cal3i-cal3_inf)/taur_L3
 }
 
 

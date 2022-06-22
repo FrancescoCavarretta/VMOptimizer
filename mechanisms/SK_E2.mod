@@ -6,7 +6,7 @@
 NEURON {
        SUFFIX SK_E2
        USEION k READ ek WRITE ik
-	USEION cal1 READ cal1i VALENCE 2
+       USEION cal1 READ cal1i VALENCE 2
        RANGE gSK_E2bar, gSK_E2, ik, zTau
 
 
