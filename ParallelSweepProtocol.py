@@ -21,7 +21,7 @@ class SweepProtocol(ephys.protocols.Protocol):
         super(SweepProtocol, self).__init__(name)
 
         # command line string format for running the evaluation        
-        self._command_line_fmt = './x86_64/special protocol_process.py %s --etype %s --param_file %s --response_file %s'
+        self._command_line_fmt = './x86_64/special protocol_process.py %s --etype %s --param_file %s --response_file %s >/dev/null'
         self._core_neuron_switch = '--coreneuron' if '--coreneuron' in sys.argv else ''
         self.stimuli = stimuli
         self.recordings = recordings
@@ -45,9 +45,16 @@ class SweepProtocol(ephys.protocols.Protocol):
         responses = {recording.name:recording.response for recording in recordings} # get the responses
       except:
         responses = {recording.name:None for recording in self.recordings}
+
+      try:        
+          os.remove(param_file) # remove the param file
+      except:
+          pass
         
-      os.remove(param_file) # remove the param file
-      os.remove(response_file) # remove the response file
+      try:
+          os.remove(response_file) # remove the response file
+      except:
+          pass
 
       return responses
 
