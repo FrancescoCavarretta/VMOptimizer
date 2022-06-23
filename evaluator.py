@@ -37,6 +37,7 @@ soma_loc = ephys.locations.NrnSeclistCompLocation(
     sec_index=0,
     comp_x=0.5)
 
+import eFELExt
 
 def read_step_protocol(protocol_name,
                     protocol_definition,
@@ -223,6 +224,27 @@ class eFELFeatureExtra(eFELFeature):
 
         if self.efel_feature_name.startswith('bpo_'): # check if internal feature
             feature_value = self.get_bpo_feature(responses)
+        elif self.efel_feature_name in eFELExt.function:
+            efel_trace = self._construct_efel_trace(responses)
+
+            if efel_trace is None:
+                feature_value = None
+            else:
+                self._setup_efel()
+
+                import efel
+                
+                eFELExt._input_resistance_tinit = efel_trace['stim_start'][0]
+                eFELExt._input_resistance_tstop = efel_trace['stim_end'][0]
+                
+                values = eFELExt.getFeatureValues(
+                    efel_trace,
+                    [self.efel_feature_name])
+                
+                feature_value = values[self.efel_feature_name]
+
+                efel.reset()
+                
         else:
             efel_trace = self._construct_efel_trace(responses)
 
@@ -253,7 +275,33 @@ class eFELFeatureExtra(eFELFeature):
 
         if self.efel_feature_name.startswith('bpo_'): # check if internal feature
             score = self.get_bpo_score(responses)
+        elif self.efel_feature_name in eFELExt.function:
+            
+            efel_trace = self._construct_efel_trace(responses)
 
+            if efel_trace is None:
+                score = 250.0
+            else:
+                self._setup_efel()
+                
+                import efel
+                
+                eFELExt._input_resistance_tinit = efel_trace['stim_start'][0]
+                eFELExt._input_resistance_tstop = efel_trace['stim_end'][0]
+                
+                values = eFELExt.getFeatureValues(
+                    efel_trace,
+                    [self.efel_feature_name])
+                
+                feature_value = values[self.efel_feature_name]
+
+                score = abs(feature_value - self.exp_mean) / self.exp_std
+                
+                if self.force_max_score:
+                    score = min(score, self.max_score)
+
+                efel.reset()
+        
         elif self.exp_mean is None:
             score = 0
 
