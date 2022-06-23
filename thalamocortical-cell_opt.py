@@ -51,7 +51,7 @@ def main(etype, seed, max_ngen, offspring_size, continue_cp=False, cp_frequency=
 if __name__ == '__main__':
     import sys
     
-
+    import time
 
     continue_cp = '--continue' in sys.argv
     offspring_size = int(sys.argv[-1])
@@ -59,4 +59,7 @@ if __name__ == '__main__':
     seed = int(sys.argv[-3])
     etype = sys.argv[-4]
     
+    tinit = time.time()
     main(etype, seed, max_ngen, offspring_size, continue_cp=continue_cp)
+    tend = time.time()
+    print ('optimization took', (tend-tinit)/60.0, 'minutes')
