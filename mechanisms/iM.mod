@@ -53,7 +53,7 @@ NEURON {
     
     RANGE i_output                            
     RANGE output
-    :GLOBAL m_timeCourse_TIME_SCALE
+    GLOBAL m_timeCourse_TIME_SCALE
 }
 
 UNITS {
