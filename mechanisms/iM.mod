@@ -28,7 +28,7 @@ NEURON {
     RANGE m_rateScale                       : exposure
     
     RANGE m_fcond                           : exposure
-    RANGE m_timeCourse_TIME_SCALE           : parameter
+    :RANGE m_timeCourse_TIME_SCALE           : parameter
     RANGE m_timeCourse_VOLT_SCALE           : parameter
     
     RANGE m_timeCourse_t                    : exposure
