@@ -110,7 +110,7 @@ def define_protocols(protocols_filename, stochkv_det=None,
                 runopt=False, prefix="", apical_sec=None):
     """Define protocols"""
     
-    with open(os.path.join(os.path.dirname(__file__), '..', protocols_filename)) as protocol_file:
+    with open(os.path.join(os.path.dirname(__file__), protocols_filename)) as protocol_file:
         protocol_definitions = json.load(protocol_file)
 
     if "__comment" in protocol_definitions:
@@ -198,11 +198,22 @@ class eFELFeatureExtra(eFELFeature):
             comment (str): comment
         """
 
-        super(eFELFeatureExtra, self).__init__(name,
-            efel_feature_name, recording_names,
-            stim_start, stim_end, exp_mean, exp_std,
-            threshold, stimulus_current, comment,
-            interp_step, double_settings, int_settings, force_max_score, max_score)
+        super(eFELFeatureExtra, self).__init__(
+            name,
+            efel_feature_name=efel_feature_name,
+            recording_names=recording_names,
+            stim_start=stim_start,
+            stim_end=stim_end,
+            exp_mean=exp_mean,
+            exp_std=exp_std,
+            threshold=threshold,
+            stimulus_current=stimulus_current,
+            comment=comment,
+            interp_step=interp_step,
+            double_settings=double_settings,
+            int_settings=int_settings,
+            force_max_score=force_max_score,
+            max_score=max_score)
 
         extra_features = ['spikerate_tau_jj_skip', 'spikerate_drop_skip',
                         'spikerate_tau_log_skip', 'spikerate_tau_fit_skip']
@@ -233,9 +244,6 @@ class eFELFeatureExtra(eFELFeature):
                 self._setup_efel()
 
                 import efel
-                
-                eFELExt._input_resistance_tinit = efel_trace['stim_start'][0]
-                eFELExt._input_resistance_tstop = efel_trace['stim_end'][0]
                 
                 values = eFELExt.getFeatureValues(
                     efel_trace,
@@ -285,9 +293,6 @@ class eFELFeatureExtra(eFELFeature):
                 self._setup_efel()
                 
                 import efel
-                
-                eFELExt._input_resistance_tinit = efel_trace['stim_start'][0]
-                eFELExt._input_resistance_tstop = efel_trace['stim_end'][0]
                 
                 values = eFELExt.getFeatureValues(
                     efel_trace,
@@ -363,7 +368,7 @@ class SingletonWeightObjective(EFeatureObjective):
 def define_fitness_calculator(main_protocol, features_filename, prefix=""):
     """Define fitness calculator"""
 
-    with open(os.path.join(os.path.dirname(__file__), '..', features_filename)) as protocol_file:
+    with open(os.path.join(os.path.dirname(__file__), features_filename)) as protocol_file:
         feature_definitions = json.load(protocol_file)
 
     if "__comment" in feature_definitions:
@@ -454,7 +459,7 @@ def define_fitness_calculator(main_protocol, features_filename, prefix=""):
 def create(etype, runopt=False, altmorph=None):
     """Setup"""
 
-    with open(os.path.join(os.path.dirname(__file__), '..', 'config/recipes.json')) as f:
+    with open(os.path.join(os.path.dirname(__file__), 'config/recipes.json')) as f:
         recipe = json.load(f)
 
     prot_path = recipe[etype]['protocol']

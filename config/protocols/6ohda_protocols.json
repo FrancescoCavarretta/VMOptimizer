@@ -20,7 +20,7 @@
             "holding": { "amp": 0.05, "delay": 0, "duration": 3600.0, "totduration": 3600.0 }
         }
     },
-    "Step-200_2000ms": {
+    "SagStep-200_2000ms": {
         "type": "StepProtocol",
         "stimuli": {
             "step": { "delay": 800, "amp": -0.2, "duration": 2000.0, "totduration": 3600.0 },

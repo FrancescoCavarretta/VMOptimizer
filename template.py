@@ -76,7 +76,7 @@ def multi_locations(sectionlist):
 def define_mechanisms(params_filename):
     """Define mechanisms"""
 
-    with open(os.path.join(os.path.dirname(__file__), '..', params_filename)) as params_file:
+    with open(os.path.join(os.path.dirname(__file__), params_filename)) as params_file:
         mech_definitions = json.load(
             params_file,
             object_pairs_hook=collections.OrderedDict)["mechanisms"]
@@ -99,10 +99,11 @@ def define_mechanisms(params_filename):
 
 def define_parameters(params_filename):
     """Define parameters"""
-
+    import CustomChannelDistribution
+    
     parameters = []
 
-    with open(os.path.join(os.path.dirname(__file__), '..', params_filename)) as params_file:
+    with open(os.path.join(os.path.dirname(__file__), params_filename)) as params_file:
         definitions = json.load(
             params_file,
             object_pairs_hook=collections.OrderedDict)
@@ -113,9 +114,33 @@ def define_parameters(params_filename):
 
     distributions_definitions = definitions["distributions"]
     for distribution, definition in distributions_definitions.items():
-        distributions[distribution] = \
-            ephys.parameterscalers.NrnSegmentSomaDistanceScaler(
-                distribution=definition["fun"])
+        distributions[distribution] = {}
+        if distribution.startswith("FromAxon"):
+            if distribution.startswith("FromAxonNa"):
+                if distribution.endswith("12"):
+                    scaler = CustomChannelDistribution.NrnSegmentNaDistanceScaler(19.0, 1.0)
+                elif distribution.endswith("16"):
+                    scaler = CustomChannelDistribution.NrnSegmentNaDistanceScaler(1.0, 19.0)
+                else:
+                    raise Exception()
+            elif distribution.startswith("FromAxonCaT"):
+                scaler = CustomChannelDistribution.NrnSegmentCaTDistanceScaler()
+            elif distribution.startswith("FromAxonCaL"):
+                scaler = CustomChannelDistribution.NrnSegmentCaLDistanceScaler()
+            else:
+                scaler = CustomChannelDistribution.NrnSegmentAxonDistanceScaler(
+                    definition["proximal"],
+                    definition["distal"],
+                    definition["somatic"],
+                    definition["dend1"],
+                    definition["deepdend"]
+                )
+                
+            distributions[distribution] = scaler
+            
+        else:
+            for seclist, multiplier in definition.items():
+                distributions[distribution].update({seclist:ephys.parameterscalers.NrnSegmentLinearScaler(multiplier=multiplier)})
 
     params_definitions = definitions["parameters"]
 

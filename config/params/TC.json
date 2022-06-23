@@ -57,7 +57,7 @@
 	    {"name":"delta_L1_TC_cad",       "val":[0.1, 20]},
 	    {"name":"delta_L2_TC_cad",       "val":[0.1, 20]},
 	    {"name":"delta_T_TC_cad",	     "val":[0.1, 20]},
-            {"name":"m_timeCourse_TIME_SCALE_iM", "val":[1.0, 6],      "dist":"Uniform" }
+            {"name":"m_timeCourse_TIME_SCALE_iM", "val":[1.0, 6],      "dist":"uniform" }
         ],
 
         "allact": [

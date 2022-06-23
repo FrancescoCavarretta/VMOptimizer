@@ -12,14 +12,10 @@ def create_mapper():
     from ipyparallel import Client
     rc = Client(profile=os.getenv('IPYTHON_PROFILE'))
 
-    logger.debug('Using ipyparallel with %d engines', len(rc))
-
     lview = rc.load_balanced_view()
 
     def mapper(func, it):
-        start_time = datetime.now()
         ret = lview.map_sync(func, it)
-        logger.debug('Generation took %s', datetime.now() - start_time)
         return ret
 
     map_function = mapper
@@ -33,7 +29,7 @@ def main(etype, seed, max_ngen, offspring_size, continue_cp=False, cp_frequency=
     evaluator = CellEvalSetup.evaluator.create(etype)
 
     # instantiate optimizer
-    opt = bluepyopt.optimisations.DEAPOptimisation(evaluator=evaluator, map_function=create_mapper(), seed=seed,
+    opt = bluepyopt.optimisations.DEAPOptimisation(evaluator=evaluator, map_function=map, seed=seed,
                                                    eta=eta, mutpb=mutpb, cxpb=cxpb)
 
 
