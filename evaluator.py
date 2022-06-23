@@ -31,6 +31,8 @@ logger = logging.getLogger(__name__)
 import os
 import bluepyopt as bpopt
 
+import simulators
+
 soma_loc = ephys.locations.NrnSeclistCompLocation(
     name='soma',
     seclist_name='somatic',
@@ -38,6 +40,7 @@ soma_loc = ephys.locations.NrnSeclistCompLocation(
     comp_x=0.5)
 
 import eFELExt
+import numpy as np
 
 def read_step_protocol(protocol_name,
                     protocol_definition,
@@ -481,7 +484,7 @@ def create(etype, runopt=False, altmorph=None):
                    for param in cell.params.values()
                    if not param.frozen]
 
-    nrn_sim = ephys.simulators.NrnSimulator(cvode_active = True)
+    nrn_sim = simulators.NrnSimulator(cvode_active = True)
 
     cell_eval = ephys.evaluators.CellEvaluator(
         cell_model=cell,

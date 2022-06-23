@@ -29,7 +29,7 @@ def main(etype, seed, max_ngen, offspring_size, continue_cp=False, cp_frequency=
     evaluator = CellEvalSetup.evaluator.create(etype)
 
     # instantiate optimizer
-    opt = bluepyopt.optimisations.DEAPOptimisation(evaluator=evaluator, map_function=create_mapper(), seed=seed,
+    opt = bluepyopt.optimisations.DEAPOptimisation(evaluator=evaluator, map_function=map, seed=seed,
                                                    eta=eta, mutpb=mutpb, cxpb=cxpb)
 
 

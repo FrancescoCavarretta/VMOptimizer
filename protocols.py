@@ -25,22 +25,21 @@ import collections
 import copy
 import json
 import bluepyopt.ephys as ephys
+import ParallelSweepProtocol
 
 import os
 
-import argparse
-parser = argparse.ArgumentParser(description='cell')
-parser.add_argument('--live', action="store_true", default=False,
-                  help='plot live')
-args, unknown = parser.parse_known_args()
+import sys
 
-live_plot = False
+parallel_flag = '--parallel_protocols' in sys.argv
 
-if live_plot:
-    import matplotlib.pyplot as plt
+if parallel_flag:
+    Protocol = ParallelSweepProtocol
+else:
+    Protocol = ephys.protocols
 
-
-class StepProtocolCustom(ephys.protocols.StepProtocol):
+    
+class StepProtocolCustom(Protocol.StepProtocol):
 
     """Step protocol with custom options to turn stochkv_det on or off"""
 
@@ -80,7 +79,7 @@ class StepProtocolCustom(ephys.protocols.StepProtocol):
         return responses
 
 
-class RampProtocol(ephys.protocols.SweepProtocol):
+class RampProtocol(Protocol.SweepProtocol):
 
     """Protocol consisting of ramp and holding current"""
 
