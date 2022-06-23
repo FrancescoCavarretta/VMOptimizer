@@ -305,6 +305,9 @@ class eFELFeatureExtra(eFELFeature):
                 if self.force_max_score:
                     score = min(score, self.max_score)
 
+                if np.isnan(score):
+                    score = 250.0
+
                 efel.reset()
         
         elif self.exp_mean is None:
