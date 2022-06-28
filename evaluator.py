@@ -31,8 +31,6 @@ logger = logging.getLogger(__name__)
 import os
 import bluepyopt as bpopt
 
-import simulators
-
 soma_loc = ephys.locations.NrnSeclistCompLocation(
     name='soma',
     seclist_name='somatic',
@@ -238,7 +236,7 @@ class eFELFeatureExtra(eFELFeature):
 
         if self.efel_feature_name.startswith('bpo_'): # check if internal feature
             feature_value = self.get_bpo_feature(responses)
-        elif self.efel_feature_name in eFELExt.function:
+        else:            
             efel_trace = self._construct_efel_trace(responses)
 
             if efel_trace is None:
@@ -253,23 +251,6 @@ class eFELFeatureExtra(eFELFeature):
                     [self.efel_feature_name])
                 
                 feature_value = values[self.efel_feature_name]
-
-                efel.reset()
-                
-        else:
-            efel_trace = self._construct_efel_trace(responses)
-
-            if efel_trace is None:
-                feature_value = None
-            else:
-                self._setup_efel()
-
-                import efel
-                values = efel.getMeanFeatureValues(
-                    [efel_trace],
-                    [self.efel_feature_name],
-                    raise_warnings=raise_warnings)
-                feature_value = values[0][self.efel_feature_name]
 
                 efel.reset()
 
@@ -283,20 +264,21 @@ class eFELFeatureExtra(eFELFeature):
 
     def calculate_score(self, responses, trace_check=False):
         """Calculate the score"""
-
         if self.efel_feature_name.startswith('bpo_'): # check if internal feature
             score = self.get_bpo_score(responses)
-        elif self.efel_feature_name in eFELExt.function:
+        elif self.exp_mean is None:
+            score = 0
             
+        else:
             efel_trace = self._construct_efel_trace(responses)
 
             if efel_trace is None:
-                score = 250.0
+                score = self.max_score
             else:
-                self._setup_efel()
-                
                 import efel
                 
+                self._setup_efel()
+
                 values = eFELExt.getFeatureValues(
                     efel_trace,
                     [self.efel_feature_name])
@@ -309,32 +291,7 @@ class eFELFeatureExtra(eFELFeature):
                     score = min(score, self.max_score)
 
                 if np.isnan(score):
-                    score = 250.0
-
-                efel.reset()
-        
-        elif self.exp_mean is None:
-            score = 0
-
-        else:
-            efel_trace = self._construct_efel_trace(responses)
-
-            if efel_trace is None:
-                score = 250.0
-            else:
-                self._setup_efel()
-
-                import efel
-                score = efel.getDistance(
-                    efel_trace,
-                    self.efel_feature_name,
-                    self.exp_mean,
-                    self.exp_std,
-                    trace_check=trace_check,
-                    error_dist = self.max_score)
-
-                if self.force_max_score:
-                    score = min(score, self.max_score)
+                    score = self.max_score
 
                 efel.reset()
 
@@ -462,7 +419,7 @@ def define_fitness_calculator(main_protocol, features_filename, prefix=""):
 
     return fitcalc, efeatures
 
-def create(etype, runopt=False, altmorph=None):
+def create(etype, coreneuron_active=False, use_process=False, runopt=False, altmorph=None):
     """Setup"""
 
     with open(os.path.join(os.path.dirname(__file__), 'config/recipes.json')) as f:
@@ -476,7 +433,7 @@ def create(etype, runopt=False, altmorph=None):
 
     fitness_calculator, efeatures = define_fitness_calculator(
         protocols_dict,
-        recipe[etype]['features'])
+        recipe[etype]['features'],)
 
     fitness_protocols=protocols_dict
 
@@ -484,7 +441,7 @@ def create(etype, runopt=False, altmorph=None):
                    for param in cell.params.values()
                    if not param.frozen]
 
-    nrn_sim = simulators.NrnSimulator(cvode_active = True)
+    nrn_sim = ephys.simulators.NrnSimulator(cvode_active=not coreneuron_active, coreneuron_active=coreneuron_active)
 
     cell_eval = ephys.evaluators.CellEvaluator(
         cell_model=cell,
@@ -492,7 +449,9 @@ def create(etype, runopt=False, altmorph=None):
         fitness_protocols=fitness_protocols,
         fitness_calculator=fitness_calculator,
         sim=nrn_sim,
-        use_params_for_seed=True)
+        use_params_for_seed=True,
+        use_process=use_process,
+        py_protocol_filename='protocol_process.py')
 
     return cell_eval
 
