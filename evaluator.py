@@ -31,8 +31,6 @@ logger = logging.getLogger(__name__)
 import os
 import bluepyopt as bpopt
 
-import simulators
-
 soma_loc = ephys.locations.NrnSeclistCompLocation(
     name='soma',
     seclist_name='somatic',
@@ -41,6 +39,10 @@ soma_loc = ephys.locations.NrnSeclistCompLocation(
 
 import eFELExt
 import numpy as np
+import efel
+
+from bluepyopt.ephys.efeatures import eFELFeature
+
 
 def read_step_protocol(protocol_name,
                     protocol_definition,
@@ -156,8 +158,6 @@ def define_protocols(protocols_filename, stochkv_det=None,
     return protocols_dict
 
 
-from bluepyopt.ephys.efeatures import eFELFeature
-
 class eFELFeatureExtra(eFELFeature):
 
     """eFEL feature extra"""
@@ -183,7 +183,10 @@ class eFELFeatureExtra(eFELFeature):
             int_settings=None,
             force_max_score=False,
             max_score = 250,
-            prefix=''):
+            prefix='',
+            t_trace_init=None,
+            t_trace_end=None,
+            dt=0.025):
 
         """Constructor
 
@@ -199,6 +202,7 @@ class eFELFeatureExtra(eFELFeature):
             exp_std(float): experimental standard deviation of this eFeature
             threshold(float): spike detection threshold (mV)
             comment (str): comment
+            t_trace_init(float):padding left at the beginning of the simulation
         """
 
         super(eFELFeatureExtra, self).__init__(
@@ -222,6 +226,9 @@ class eFELFeatureExtra(eFELFeature):
                         'spikerate_tau_log_skip', 'spikerate_tau_fit_skip']
 
         self.prefix = prefix
+        self.t_trace_init = t_trace_init
+        self.t_trace_end = t_trace_end
+        self.dt = dt
 
     def get_bpo_score(self, responses):
         """Return internal score which is directly passed as a response"""
@@ -233,45 +240,63 @@ class eFELFeatureExtra(eFELFeature):
             score = abs(feature_value - self.exp_mean) / self.exp_std
         return score
 
+
+    def _preprocess_efel_trace(self, trace):
+        """ remove the initial part of the trace """
+        if hasattr(trace['T'], 'to_numpy'):
+            trace['T'] = trace['T'].to_numpy()
+    
+        if hasattr(trace['V'], 'to_numpy'):
+            trace['V'] = trace['V'].to_numpy()
+
+        # cut the trace
+        if self.t_trace_init:
+            idx = trace['T'] >= self.t_trace_init
+            trace['T'] = trace['T'][idx]
+            trace['V'] = trace['V'][idx]
+            
+        if self.t_trace_end:
+            idx = trace['T'] <= self.t_trace_end
+            trace['T'] = trace['T'][idx]
+            trace['V'] = trace['V'][idx]
+            
+        # interpolate the trace
+        # new t-axis
+        t = np.arange(trace['T'][0], trace['T'][-1] + self.dt, self.dt)
+        
+        # interpolation
+        v = np.interp(t, trace['T'], trace['V'])
+
+        # copy to the trace map
+        trace['T'] = t
+        trace['V'] = v
+        
+        
     def calculate_feature(self, responses, raise_warnings=False):
         """Calculate feature value"""
 
         if self.efel_feature_name.startswith('bpo_'): # check if internal feature
             feature_value = self.get_bpo_feature(responses)
-        elif self.efel_feature_name in eFELExt.function:
+        else:            
             efel_trace = self._construct_efel_trace(responses)
-
+            
             if efel_trace is None:
                 feature_value = None
             else:
-                self._setup_efel()
-
-                import efel
-                
-                values = eFELExt.getFeatureValues(
-                    efel_trace,
-                    [self.efel_feature_name])
-                
-                feature_value = values[self.efel_feature_name]
-
-                efel.reset()
-                
-        else:
-            efel_trace = self._construct_efel_trace(responses)
-
-            if efel_trace is None:
-                feature_value = None
-            else:
-                self._setup_efel()
-
-                import efel
-                values = efel.getMeanFeatureValues(
-                    [efel_trace],
-                    [self.efel_feature_name],
-                    raise_warnings=raise_warnings)
-                feature_value = values[0][self.efel_feature_name]
-
-                efel.reset()
+                try:
+                    self._preprocess_efel_trace(efel_trace)
+                    
+                    self._setup_efel()
+                    
+                    values = eFELExt.getFeatureValues(
+                        efel_trace,
+                        [self.efel_feature_name])
+                    
+                    feature_value = values[self.efel_feature_name]
+                except:
+                    feature_value = None
+                finally:
+                    efel.reset()
 
         logger.debug(
             'Calculated value for %s: %s',
@@ -283,60 +308,35 @@ class eFELFeatureExtra(eFELFeature):
 
     def calculate_score(self, responses, trace_check=False):
         """Calculate the score"""
-
         if self.efel_feature_name.startswith('bpo_'): # check if internal feature
             score = self.get_bpo_score(responses)
-        elif self.efel_feature_name in eFELExt.function:
-            
-            efel_trace = self._construct_efel_trace(responses)
-
-            if efel_trace is None:
-                score = 250.0
-            else:
-                self._setup_efel()
-                
-                import efel
-                
-                values = eFELExt.getFeatureValues(
-                    efel_trace,
-                    [self.efel_feature_name])
-                
-                feature_value = values[self.efel_feature_name]
-
-                score = abs(feature_value - self.exp_mean) / self.exp_std
-                
-                if self.force_max_score:
-                    score = min(score, self.max_score)
-
-                if np.isnan(score):
-                    score = 250.0
-
-                efel.reset()
-        
         elif self.exp_mean is None:
             score = 0
-
+            
         else:
             efel_trace = self._construct_efel_trace(responses)
 
             if efel_trace is None:
-                score = 250.0
+                score = self.max_score
             else:
-                self._setup_efel()
+                try:
+                    self._preprocess_efel_trace(efel_trace)
+                    
+                    self._setup_efel()
 
-                import efel
-                score = efel.getDistance(
-                    efel_trace,
-                    self.efel_feature_name,
-                    self.exp_mean,
-                    self.exp_std,
-                    trace_check=trace_check,
-                    error_dist = self.max_score)
+                    feature_value = eFELExt.getFeatureValues(efel_trace, [self.efel_feature_name])[self.efel_feature_name]
+                    
+                    score = abs(feature_value - self.exp_mean) / self.exp_std
+                    
+                    if self.force_max_score:
+                        score = min(score, self.max_score)
 
-                if self.force_max_score:
-                    score = min(score, self.max_score)
-
-                efel.reset()
+                    if np.isnan(score):
+                        score = self.max_score
+                except:
+                    score = self.max_score
+                finally:
+                    efel.reset()
 
         logger.debug('Calculated score for %s: %f', self.name, score)
 
@@ -408,17 +408,27 @@ def define_fitness_calculator(main_protocol, features_filename, prefix=""):
                 if 'strict_stim' in feature_config:
                     strict_stim = feature_config['strict_stim']
                 else:
-                    strict_stim = True
+                    strict_stim = False
 
                 if hasattr(protocol, 'step_delay'):
 
                     stim_start = protocol.step_delay
-
+                    
+                    if 't_trace_init' in feature_config:
+                        t_trace_init = feature_config['t_trace_init']
+                    else:
+                        t_trace_init = None
+                        
+                    if 't_trace_end' in feature_config:
+                        t_trace_end = feature_config['t_trace_end']
+                    else:
+                        t_trace_end = None
+                        
                     if 'threshold' in feature_config:
                         threshold = feature_config['threshold']
                     else:
                         threshold = -30
-
+                        
                     if 'bAP' in protocol_name:
                         # bAP response can be after stimulus
                         stim_end = protocol.total_duration
@@ -449,7 +459,9 @@ def define_fitness_calculator(main_protocol, features_filename, prefix=""):
                     prefix=prefix,
                     int_settings={'strict_stiminterval': strict_stim},
                     force_max_score = True,
-                    max_score = 250)
+                    max_score = 250,
+                    t_trace_init=t_trace_init,
+                    t_trace_end=t_trace_end)
                 efeatures[feature_name] = feature
                 features.append(feature)
                 objective = SingletonWeightObjective(
@@ -462,7 +474,7 @@ def define_fitness_calculator(main_protocol, features_filename, prefix=""):
 
     return fitcalc, efeatures
 
-def create(etype, runopt=False, altmorph=None):
+def create(etype, coreneuron_active=False, use_process=False, runopt=False, altmorph=None):
     """Setup"""
 
     with open(os.path.join(os.path.dirname(__file__), 'config/recipes.json')) as f:
@@ -476,7 +488,7 @@ def create(etype, runopt=False, altmorph=None):
 
     fitness_calculator, efeatures = define_fitness_calculator(
         protocols_dict,
-        recipe[etype]['features'])
+        recipe[etype]['features'],)
 
     fitness_protocols=protocols_dict
 
@@ -484,15 +496,29 @@ def create(etype, runopt=False, altmorph=None):
                    for param in cell.params.values()
                    if not param.frozen]
 
-    nrn_sim = simulators.NrnSimulator(cvode_active = True)
 
-    cell_eval = ephys.evaluators.CellEvaluator(
-        cell_model=cell,
-        param_names=param_names,
-        fitness_protocols=fitness_protocols,
-        fitness_calculator=fitness_calculator,
-        sim=nrn_sim,
-        use_params_for_seed=True)
+    try:
+        nrn_sim = ephys.simulators.NrnSimulator(cvode_active=not coreneuron_active, coreneuron_active=coreneuron_active)
 
+        cell_eval = ephys.evaluators.CellEvaluator(
+            cell_model=cell,
+            param_names=param_names,
+            fitness_protocols=fitness_protocols,
+            fitness_calculator=fitness_calculator,
+            sim=nrn_sim,
+            use_params_for_seed=True,
+            use_process=use_process,
+            py_protocol_filename='protocol_process.py')
+    except:
+        nrn_sim = ephys.simulators.NrnSimulator(cvode_active=True)
+
+        cell_eval = ephys.evaluators.CellEvaluator(
+            cell_model=cell,
+            param_names=param_names,
+            fitness_protocols=fitness_protocols,
+            fitness_calculator=fitness_calculator,
+            sim=nrn_sim,
+            use_params_for_seed=True)
+        
     return cell_eval
 

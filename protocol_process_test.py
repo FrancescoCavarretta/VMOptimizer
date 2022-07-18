@@ -36,21 +36,42 @@ if __name__ == '__main__':
       print()
       
   except:
-    pass
-
-  # get eType
-  try:
     etype = sys.argv[sys.argv.index('--etype')+1]
-  except:
-    pass
-  
+    
   # create the evaluator for running the protocols
   evaluator = CellEvalSetup.evaluator.create(etype, coreneuron_active=coreneuron_active, use_process=False)
+
+
   
   # get the responses
   responses = evaluator.run_protocols(
     protocols=evaluator.fitness_protocols.values(),
     param_values=param)
+
+
+  x = responses['.Step240_2000ms.soma.v']
+  t = x['time'].to_numpy()
+  v = x['voltage'].to_numpy()
+  idx = t > 100
+  trace = {'T':t[idx], 'V':v[idx], 'stim_start':[800], 'stim_end':[2800]}
+  import eFELExt
+  import efel
+  efel.setThreshold(-20.)
+  print ( eFELExt.getFeatureValues(trace, ['AP_count_after_stim']) )
+
+  import evaluator
+  ev=evaluator.eFELFeatureExtra('test',
+            efel_feature_name='AP_count_after_stim',
+            recording_names={'':'.Step240_2000ms.soma.v'},
+            stim_start=800,
+            stim_end=2800,
+            exp_mean=0.0,
+            exp_std=0.01,
+            threshold=-20.0,
+            int_settings={'strict_stiminterval':False},
+            force_max_score=True,
+            max_score=250.)
+  print ( 'score', ev.calculate_score(responses) )
 
   # store the responses
   np.save(response_file, responses, allow_pickle=True)
