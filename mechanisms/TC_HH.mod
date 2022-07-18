@@ -6,13 +6,15 @@ NEURON {
 	SUFFIX TC_HH
 	USEION na READ ena WRITE ina
 	USEION k READ ek WRITE ik
-	RANGE gna_max, gk_max, gnap_max, vtraubna, vtraubk
+	RANGE gna_max, gk_max, gnap_max
 	RANGE m_inf, h_inf, n_inf, mp_inf, hp_inf
 	RANGE tau_m, tau_h, tau_n, tau_mp, tau_hp
 	RANGE ina, ik
 
         : ------ analysis ------
         RANGE output_nat, output_nap, output_k, i_output_nat, i_output_nap, i_output_na, i_output_k
+        GLOBAL m_factor, n_factor, h_factor
+        GLOBAL vtraubna, vtraubk
         
         GLOBAL shift
 }
@@ -35,6 +37,9 @@ PARAMETER {
 	vtraubna = -55.5   : Average of original value and Amarillo et al., J Neurophysiol 112:393-410, 2014
         vtraubk  = -55.5   : Average of original value and Amarillo et al., J Neurophysiol 112:393-410, 2014
         shift    = 0
+        m_factor = 1
+        n_factor = 1
+        h_factor = 1
 }
 
 STATE {
@@ -132,18 +137,18 @@ PROCEDURE evaluate_fct(v(mV)) { LOCAL a,b,v2, v3, v4
 
 	a = 0.32 * (13-v2) / ( exp((13-v2)/4) - 1)
 	b = 0.28 * (v2-40) / ( exp((v2-40)/5) - 1)
-	tau_m = 1 / (a + b) / tcorr
+	tau_m = 1 / (a + b) / tcorr * m_factor
 	m_inf = a / (a + b)
 
 	a = 0.128 * exp((17-v2)/18)
 	b = 4 / ( 1 + exp((40-v2)/5) )
-	tau_h = 1 / (a + b) / tcorr
+	tau_h = 1 / (a + b) / tcorr * h_factor
 	h_inf = a / (a + b)
 
 
 	a = 0.032 * (15-v3) / ( exp((15-v3)/5) - 1)
 	b = 0.5 * exp((10-v3)/40)
-	tau_n = 1 / (a + b) / tcorr
+	tau_n = 1 / (a + b) / tcorr * n_factor
 	n_inf = a / (a + b)
 
 
