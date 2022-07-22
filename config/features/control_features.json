@@ -1,86 +1,88 @@
 {
-    "Step120_2000ms": {
-        "soma.v": [
-            { "feature": "AP_amplitude", "val": [ 53.42973981029203, 5.982008778503827 ], "n": 7.0, "weight": 0.5, "threshold": -20 },
-            { "feature": "AHP_depth", "val": [ 8.709463392193367, 3.9124411833235593 ], "n": 7.0, "weight": 1.0, "threshold": -20 },
-            { "feature": "AP_duration_half_width", "val": [ 0.9285714285716397, 0.3638419332361411 ], "n": 7.0, "weight": 1.0, "threshold": -20 },
-            { "feature": "AP_count", "val": [ 20.714285714285715, 8.138678961483567 ], "n": 7.0, "weight": 1.0, "threshold": -20 },
-            { "feature": "time_to_first_spike", "val": [ 26.27142857154789, 13.02737045425738 ], "n": 7.0, "weight": 1.0, "threshold": -20 },
-            { "feature": "inv_first_ISI", "val": [ 19.002037121943935, 8.206640704773276 ], "n": 7.0, "weight": 1.0, "threshold": -20 },
-            { "feature": "inv_second_ISI", "val": [ 30.181553805302837, 18.60462879172825 ], "n": 7.0, "weight": 1.0, "threshold": -20 },
-            { "feature": "inv_last_ISI", "val": [ 47.36490875734096, 65.41237196018253 ], "n": 7.0, "weight": 1.0, "threshold": -20 },
-            { "feature": "adaptation_index2", "val": [ 0.03700639294698531, 0.024390850116563466 ], "n": 7.0, "weight": 1.0, "threshold": -20 },
-            { "feature": "voltage_base", "val": [ -72.24330825805653, 3.003829860366194 ], "n": 7.0, "weight": 1.0, "threshold": -20 },
-            { "feature": "voltage_after_stim", "val": [ -74.85411511773238, 3.6696752025605277 ], "n": 7.0, "weight": 1.0, "threshold": -20 },
-            { "feature": "AP_count_before_stim", "val": [ 0.0, 0.01 ], "n": 7.0, "weight": 1.0, "threshold": -20 },
-            { "feature": "AP_count_after_stim", "val": [ 0.8571428571428571, 0.01 ], "n": 7.0, "weight": 1.0, "threshold": -20 },
-            { "feature": "max_amp_difference", "val": [ 5.249023441274976, 4.508612849518545 ], "n": 7.0, "weight": 1.0, "threshold": -20 },
-            { "feature": "clustering_index", "val": [ 0.7227417453467873, 0.17625074273302319 ], "n": 7.0, "weight": 1.0, "threshold": -20 },
-            { "feature": "fast_AHP", "val": [ 12.813023162857514, 1.840265510785671 ], "n": 7.0, "weight": 1.0, "threshold": -20 }
-        ]
-    },
-    "Step160_2000ms": {
-        "soma.v": [
-            { "feature": "AP_amplitude", "val": [ 56.86187743587009, 10.773097349632335 ], "n": 6.0, "weight": 0.5, "threshold": -20 },
-            { "feature": "AHP_depth", "val": [ 8.97089640325637, 4.772119354379478 ], "n": 6.0, "weight": 1.0, "threshold": -20 },
-            { "feature": "AP_duration_half_width", "val": [ 1.1666666666669319, 0.2338090388900556 ], "n": 6.0, "weight": 1.0, "threshold": -20 },
-            { "feature": "AP_count", "val": [ 33.5, 16.97939928266015 ], "n": 6.0, "weight": 1.0, "threshold": -20 },
-            { "feature": "time_to_first_spike", "val": [ 13.366666666783052, 7.036097403155329 ], "n": 6.0, "weight": 1.0, "threshold": -20 },
-            { "feature": "inv_first_ISI", "val": [ 44.64690192343442, 19.297751273930814 ], "n": 6.0, "weight": 1.0, "threshold": -20 },
-            { "feature": "inv_second_ISI", "val": [ 46.703734662755465, 18.926733351123257 ], "n": 6.0, "weight": 1.0, "threshold": -20 },
-            { "feature": "inv_last_ISI", "val": [ 34.71021815242529, 52.5411051744468 ], "n": 6.0, "weight": 1.0, "threshold": -20 },
-            { "feature": "adaptation_index2", "val": [ 0.03457386053479937, 0.030793880816945597 ], "n": 6.0, "weight": 1.0, "threshold": -20 },
-            { "feature": "voltage_base", "val": [ -71.86677856445313, 3.3757962405643047 ], "n": 6.0, "weight": 1.0, "threshold": -20 },
-            { "feature": "voltage_after_stim", "val": [ -75.03303635956377, 4.341814891863061 ], "n": 6.0, "weight": 1.0, "threshold": -20 },
-            { "feature": "AP_count_before_stim", "val": [ 0.0, 0.01 ], "n": 6.0, "weight": 1.0, "threshold": -20 },
-            { "feature": "AP_count_after_stim", "val": [ 0.5, 0.01 ], "n": 6.0, "weight": 1.0, "threshold": -20 },
-            { "feature": "max_amp_difference", "val": [ 5.559285485051514, 5.713748597982393 ], "n": 6.0, "weight": 1.0, "threshold": -20 },
-            { "feature": "clustering_index", "val": [ 0.7072202286018076, 0.1575211830656493 ], "n": 6.0, "weight": 1.0, "threshold": -20 },
-            { "feature": "fast_AHP", "val": [ 7.453918460706233, 10.037614880614301 ], "n": 6.0, "weight": 1.0, "threshold": -20 }
-        ]
-    },
     "Step200_2000ms": {
         "soma.v": [
-            { "feature": "AP_amplitude", "val": [ 55.03082274734936, 6.147310174480426 ], "n": 4.0, "weight": 0.5, "threshold": -20 },
-            { "feature": "AHP_depth", "val": [ 8.930927276897764, 4.631484552160259 ], "n": 5.0, "weight": 1.0, "threshold": -20 },
-            { "feature": "AP_duration_half_width", "val": [ 0.9750000000002216, 0.39475730941099013 ], "n": 4.0, "weight": 1.0, "threshold": -20 },
-            { "feature": "AP_count", "val": [ 36.2, 16.2234398325386 ], "n": 5.0, "weight": 1.0, "threshold": -20 },
-            { "feature": "time_to_first_spike", "val": [ 9.680000000115546, 5.853375094765035 ], "n": 5.0, "weight": 1.0, "threshold": -20 },
-            { "feature": "inv_first_ISI", "val": [ 62.81580777624866, 19.743109570163686 ], "n": 5.0, "weight": 1.0, "threshold": -20 },
-            { "feature": "inv_second_ISI", "val": [ 58.080895834765364, 16.457291616257304 ], "n": 5.0, "weight": 1.0, "threshold": -20 },
-            { "feature": "inv_last_ISI", "val": [ 20.800771562220184, 16.162880155712394 ], "n": 5.0, "weight": 1.0, "threshold": -20 },
-            { "feature": "adaptation_index2", "val": [ 0.03400499696659564, 0.039571515886127 ], "n": 5.0, "weight": 1.0, "threshold": -20 },
-            { "feature": "voltage_base", "val": [ -71.5379096984862, 3.2138137803649713 ], "n": 5.0, "weight": 1.0, "threshold": -20 },
-            { "feature": "voltage_after_stim", "val": [ -75.00954892994575, 4.531769988127503 ], "n": 5.0, "weight": 1.0, "threshold": -20 },
-            { "feature": "AP_count_before_stim", "val": [ 0.0, 0.01 ], "n": 5.0, "weight": 1.0, "threshold": -20 },
-            { "feature": "AP_count_after_stim", "val": [ 0.0, 0.01 ], "n": 5.0, "weight": 1.0, "threshold": -20 },
-            { "feature": "max_amp_difference", "val": [ 4.330444336798679, 3.3474771655437703 ], "n": 5.0, "weight": 1.0, "threshold": -20 },
-            { "feature": "clustering_index", "val": [ 0.7454005065282744, 0.161444305335853 ], "n": 5.0, "weight": 1.0, "threshold": -20 },
-            { "feature": "fast_AHP", "val": [ 9.902954106155242, 2.5985229462459114 ], "n": 5.0, "weight": 1.0, "threshold": -20 }
+            { "feature": "AP_amplitude", "val": [ 54.974025113800835, 6.267098971366885 ], "n": 9.0, "weight": 0.5, "t_trace_init":100, "threshold": -20 },
+            { "feature": "AHP_depth", "val": [ 6.9676195409848685, 4.199799681300903 ], "n": 9.0, "weight": 1.0, "t_trace_init":100, "threshold": -20 },
+            { "feature": "AP_width", "val": [ 0.9555555555557729, 0.20069324297991717 ], "n": 9.0, "weight": 1.0, "t_trace_init":100, "threshold": -20 },
+            { "feature": "AP_count", "val": [ 14.333333333333334, 12.922847983320084 ], "n": 9.0, "weight": 1.0, "t_trace_init":100, "threshold": -20 },
+            { "feature": "time_to_first_spike", "val": [ 28.655555555675416, 36.05458053810041 ], "n": 9.0, "weight": 1.0, "t_trace_init":100, "threshold": -20 },
+            { "feature": "inv_first_ISI", "val": [ 36.124402387130644, 20.047606742806217 ], "n": 9.0, "weight": 1.0, "t_trace_init":100, "threshold": -20 },
+            { "feature": "inv_second_ISI", "val": [ 28.60074680236022, 19.096396589563593 ], "n": 9.0, "weight": 1.0, "t_trace_init":100, "threshold": -20 },
+            { "feature": "inv_last_ISI", "val": [ 12.289678375709554, 14.366616293818549 ], "n": 9.0, "weight": 1.0, "t_trace_init":100, "threshold": -20 },
+            { "feature": "adaptation_index2", "val": [ 0.016331659379128463, 0.1488797349302043 ], "n": 9.0, "weight": 1.0, "t_trace_init":100, "threshold": -20 },
+            { "feature": "voltage_base", "val": [ -70.94988242045851, 1.533450765780804 ], "n": 9.0, "weight": 1.0, "t_trace_init":100, "threshold": -20 },
+            { "feature": "voltage_after_stim", "val": [ -73.33804999388018, 2.4909575822278813 ], "n": 9.0, "weight": 1.0, "t_trace_init":100, "threshold": -20 },
+            { "feature": "AP_count_before_stim", "val": [ 0.0, 0.01 ], "n": 9.0, "weight": 1.0, "t_trace_init":100, "threshold": -20 },
+            { "feature": "AP_count_after_stim", "val": [ 0.0, 0.01 ], "n": 9.0, "weight": 1.0, "t_trace_init":100, "threshold": -20 },
+            { "feature": "max_amp_difference", "val": [ 3.014006830905666, 2.9749962739120748 ], "n": 9.0, "weight": 1.0, "t_trace_init":100, "threshold": -20 },
+            { "feature": "clustering_index", "val": [ 0.9147749900438072, 0.11662547348483701 ], "n": 9.0, "weight": 1.0, "t_trace_init":100, "threshold": -20 },
+            { "feature": "fast_AHP", "val": [ 10.783849660912036, 3.6713176875322637 ], "n": 9.0, "weight": 1.0, "t_trace_init":100, "threshold": -20 }
+        ]
+    },
+    "Step240_2000ms": {
+        "soma.v": [
+            { "feature": "AP_amplitude", "val": [ 55.10122093724767, 7.249591995687241 ], "n": 9.0, "weight": 0.5, "t_trace_init":100, "threshold": -20 },
+            { "feature": "AHP_depth", "val": [ 7.472603817095987, 4.74149035367855 ], "n": 9.0, "weight": 1.0, "t_trace_init":100, "threshold": -20 },
+            { "feature": "AP_width", "val": [ 0.9333333333335455, 0.2179449471770832 ], "n": 9.0, "weight": 1.0, "t_trace_init":100, "threshold": -20 },
+            { "feature": "AP_count", "val": [ 25.11111111111111, 12.333333333333332 ], "n": 9.0, "weight": 1.0, "t_trace_init":100, "threshold": -20 },
+            { "feature": "time_to_first_spike", "val": [ 14.000000000116529, 11.92864200150481 ], "n": 9.0, "weight": 1.0, "t_trace_init":100, "threshold": -20 },
+            { "feature": "inv_first_ISI", "val": [ 46.15783820149675, 24.356221302556616 ], "n": 9.0, "weight": 1.0, "t_trace_init":100, "threshold": -20 },
+            { "feature": "inv_second_ISI", "val": [ 48.05804537669967, 18.894121856383467 ], "n": 9.0, "weight": 1.0, "t_trace_init":100, "threshold": -20 },
+            { "feature": "inv_last_ISI", "val": [ 11.831708496907241, 14.475620221056948 ], "n": 9.0, "weight": 1.0, "t_trace_init":100, "threshold": -20 },
+            { "feature": "adaptation_index2", "val": [ 0.05399405967776467, 0.037770319687669904 ], "n": 9.0, "weight": 1.0, "t_trace_init":100, "threshold": -20 },
+            { "feature": "voltage_base", "val": [ -70.72608991241164, 1.5132891218912254 ], "n": 9.0, "weight": 1.0, "t_trace_init":100, "threshold": -20 },
+            { "feature": "voltage_after_stim", "val": [ -73.65683184384251, 2.73453406942843 ], "n": 9.0, "weight": 1.0, "t_trace_init":100, "threshold": -20 },
+            { "feature": "AP_count_before_stim", "val": [ 0.0, 0.01 ], "n": 9.0, "weight": 1.0, "t_trace_init":100, "threshold": -20 },
+            { "feature": "AP_count_after_stim", "val": [ 0.0, 0.01 ], "n": 9.0, "weight": 1.0, "t_trace_init":100, "threshold": -20 },
+            { "feature": "max_amp_difference", "val": [ 3.621845287108559, 2.997964840763442 ], "n": 9.0, "weight": 1.0, "t_trace_init":100, "threshold": -20 },
+            { "feature": "clustering_index", "val": [ 0.8312816764132553, 0.10906845860197378 ], "n": 9.0, "weight": 1.0, "t_trace_init":100, "threshold": -20 },
+            { "feature": "fast_AHP", "val": [ 9.332058571302689, 3.3037298401844626 ], "n": 9.0, "weight": 1.0, "t_trace_init":100, "threshold": -20 }
+        ]
+    },
+    "Step280_2000ms": {
+        "soma.v": [
+            { "feature": "AP_amplitude", "val": [ 55.18989186186863, 7.499908745327647 ], "n": 9.0, "weight": 0.5, "t_trace_init":100, "threshold": -20 },
+            { "feature": "AHP_depth", "val": [ 7.666540067824696, 5.263379523346686 ], "n": 9.0, "weight": 1.0, "t_trace_init":100, "threshold": -20 },
+            { "feature": "AP_width", "val": [ 0.9222222222224319, 0.25385910352885466 ], "n": 9.0, "weight": 1.0, "t_trace_init":100, "threshold": -20 },
+            { "feature": "AP_count", "val": [ 32.55555555555556, 15.240661986205776 ], "n": 9.0, "weight": 1.0, "t_trace_init":100, "threshold": -20 },
+            { "feature": "time_to_first_spike", "val": [ 7.755555555670664, 3.1277432403863057 ], "n": 9.0, "weight": 1.0, "t_trace_init":100, "threshold": -20 },
+            { "feature": "inv_first_ISI", "val": [ 58.08119192743753, 25.243868404390838 ], "n": 9.0, "weight": 1.0, "t_trace_init":100, "threshold": -20 },
+            { "feature": "inv_second_ISI", "val": [ 54.712616351466075, 21.03506221142844 ], "n": 9.0, "weight": 1.0, "t_trace_init":100, "threshold": -20 },
+            { "feature": "inv_last_ISI", "val": [ 16.37789869133211, 13.907579628851993 ], "n": 9.0, "weight": 1.0, "t_trace_init":100, "threshold": -20 },
+            { "feature": "adaptation_index2", "val": [ 0.033272712263817034, 0.019570594712399275 ], "n": 9.0, "weight": 1.0, "t_trace_init":100, "threshold": -20 },
+            { "feature": "voltage_base", "val": [ -70.50034199515324, 1.8248636631007848 ], "n": 9.0, "weight": 1.0, "t_trace_init":100, "threshold": -20 },
+            { "feature": "voltage_after_stim", "val": [ -73.63678379886015, 3.183691494593762 ], "n": 9.0, "weight": 1.0, "t_trace_init":100, "threshold": -20 },
+            { "feature": "AP_count_before_stim", "val": [ 0.0, 0.01 ], "n": 9.0, "weight": 1.0, "t_trace_init":100, "threshold": -20 },
+            { "feature": "AP_count_after_stim", "val": [ 0.0, 0.01 ], "n": 9.0, "weight": 1.0, "t_trace_init":100, "threshold": -20 },
+            { "feature": "max_amp_difference", "val": [ 3.417603236039365, 2.356264472869433 ], "n": 9.0, "weight": 1.0, "t_trace_init":100, "threshold": -20 },
+            { "feature": "clustering_index", "val": [ 0.7934356074863593, 0.13374981595146748 ], "n": 9.0, "weight": 1.0, "t_trace_init":100, "threshold": -20 },
+            { "feature": "fast_AHP", "val": [ 8.404862122740624, 3.4514249521233324 ], "n": 9.0, "weight": 1.0, "t_trace_init":100, "threshold": -20 }
         ]
     },
     "SagStep-200_2000ms": {
         "soma.v": [
-            { "feature": "voltage_base", "val": [ -77.60231259663888, 3.2505487994757085 ], "n": 6.0, "weight": 1.0, "threshold": -34.75 },
-            { "feature": "time_to_first_spike", "val": [ 2042.6166666651768, 31.403465838421035 ], "n": 6.0, "weight": 1.0, "threshold": -34.75 },
-            { "feature": "AP_count_before_stim", "val": [ 0.0, 0.01 ], "n": 6.0, "weight": 1.0, "threshold": -34.75 },
-            { "feature": "AP_count_after_stim", "val": [ 3.0, 1.6733200530681511 ], "n": 6.0, "weight": 1.0, "threshold": -34.75 },
-            { "feature": "inv_first_ISI", "val": [ 165.1971256821005, 97.35009132176947 ], "n": 6.0, "weight": 1.0, "threshold": -34.75 },
-            { "feature": "inv_second_ISI", "val": [ 33.86276127615841, 52.48530333545698 ], "n": 6.0, "weight": 1.0, "threshold": -34.75 },
-            { "feature": "inv_last_ISI", "val": [ 124.97456247467613, 97.64958775791236 ], "n": 6.0, "weight": 1.0, "threshold": -34.75 },
-            { "feature": "voltage_after_stim", "val": [ -74.51386904205377, 3.588373336621186 ], "n": 6.0, "weight": 1.0, "threshold": -34.75 },
-            { "feature": "sag_amplitude", "val": [ 12.056557972969117, 7.26947990808799 ], "n": 6.0, "weight": 1.0, "threshold": -34.75 },
-            { "feature": "voltage_deflection", "val": [ -22.317125638104738, 8.236865033230925 ], "n": 6.0, "weight": 1.0, "threshold": -34.75 }
+            { "feature": "voltage_base", "val": [ -77.91007518937487, 3.7970015449287353 ], "n": 8.0, "weight": 1.0, "t_trace_init":100, "threshold": -34.75 },
+            { "feature": "AP1_amp_rev", "val": [ 57.47216926746651, 10.390617887399186 ], "n": 8.0, "weight": 0.5, "t_trace_init":100, "threshold": -34.75 },
+            { "feature": "AP2_amp_rev", "val": [ 32.255600114862474, 10.014912790813616 ], "n": 6.0, "weight": 0.5, "t_trace_init":100, "threshold": -34.75 },
+            { "feature": "time_to_first_spike", "val": [ 2047.4874999985059, 38.22405515973526 ], "n": 8.0, "weight": 1.0, "t_trace_init":100, "threshold": -34.75 },
+            { "feature": "AP_count_before_stim", "val": [ 0.0, 0.01 ], "n": 8.0, "weight": 1.0, "t_trace_init":100, "threshold": -34.75 },
+            { "feature": "AP_count_after_stim", "val": [ 2.25, 0.4629100498862757 ], "n": 8.0, "weight": 1.0, "t_trace_init":100, "threshold": -34.75 },
+            { "feature": "inv_first_ISI", "val": [ 151.34767648568226, 107.10606861825816 ], "n": 8.0, "weight": 1.0, "t_trace_init":100, "threshold": -34.75 },
+            { "feature": "inv_second_ISI", "val": [ 27.046783625755587, 50.105293969475724 ], "n": 8.0, "weight": 1.0, "t_trace_init":100, "threshold": -34.75 },
+            { "feature": "inv_last_ISI", "val": [ 122.35157512113346, 95.37298249933274 ], "n": 8.0, "weight": 1.0, "t_trace_init":100, "threshold": -34.75 },
+            { "feature": "voltage_after_stim", "val": [ -75.3132939783255, 4.014971915986918 ], "n": 8.0, "weight": 1.0, "t_trace_init":100, "threshold": -34.75 },
+            { "feature": "sag_amplitude", "val": [ 10.955873931518436, 7.845865745257617 ], "n": 8.0, "weight": 1.0, "t_trace_init":100, "threshold": -34.75 },
+            { "feature": "voltage_deflection", "val": [ -22.749090547596477, 8.763637336056915 ], "n": 8.0, "weight": 1.0, "t_trace_init":100, "threshold": -34.75 }
         ]
     },
     "Pulse": {
         "soma.v": [
-            { "feature": "decay_time_constant_after_stim2", "val": [ 20.69, 10.27 ], "weight": 1 }
+            { "feature": "decay_time_constant_after_stim2", "val": [ 20.69, 10.27 ], "weight": 1, "t_trace_init":100 }
         ]
     },
     "Step_2000ms": {
         "soma.v": [
-            { "feature": "input_resistance", "val": [ 237.0174662272137, 53.57558773091848 ], "n": 6.0, "weight": 1.0 }
+            { "feature": "input_resistance", "val": [ 227.6358865661278, 56.80321113741724 ], "n": 8.0, "weight": 1.0, "t_trace_init":100 }
         ]
     }
 }
