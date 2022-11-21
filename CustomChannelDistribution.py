@@ -38,7 +38,15 @@ class NrnSegmentAxonDistanceScaler(ParameterScaler, DictMixin):
         ## if it is not an axon, then it is the same coefficient as proximal
         secname = sim.neuron.h.secname(sec=segment.sec)
         if "axon" in secname:
-            multiplier = self.axon_prox_multiplier if segment.x <= 0.5 else self.axon_dist_multiplier
+            ## for dendrite we distinguish by order
+            sref = sim.neuron.h.SectionRef(sec=segment.sec)
+
+            # if the parent is soma than it is a first order
+            if "soma" in sim.neuron.h.secname(sec=sref.parent):
+                multiplier = self.axon_prox_multiplier
+            else:
+                multiplier = self.axon_dist_multiplier
+                
         elif "soma" in secname:
             multiplier = self.somatic_multiplier
         else:
@@ -100,7 +108,14 @@ class NrnSegmentNaDistanceScaler(ParameterScaler, DictMixin):
         ## if it is not an axon, then it is the same coefficient as proximal
         secname = sim.neuron.h.secname(sec=segment.sec)
         if "axon" in secname:
-            multiplier = self.axon_prox_multiplier if segment.x <= 0.5 else self.axon_dist_multiplier
+            ## for dendrite we distinguish by order
+            sref = sim.neuron.h.SectionRef(sec=segment.sec)
+
+            # if the parent is soma than it is a first order
+            if "soma" in sim.neuron.h.secname(sec=sref.parent):
+                multiplier = self.axon_prox_multiplier
+            else:
+                multiplier = self.axon_dist_multiplier
         elif "soma" in secname:
             multiplier = 1.0
         else:
