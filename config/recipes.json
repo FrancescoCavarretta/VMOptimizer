@@ -1,0 +1,30 @@
+{
+    "control": {
+        "morph_path": "morphologies/",  			 
+        "morphology": "AA0136.swc",
+        "params": "config/params/TC.json",
+        "protocol": "config/protocols/control_protocols.json",
+        "features": "config/features/control_features.json"
+    },
+    "lesioned": {
+        "morph_path": "morphologies/",  			 
+        "morphology": "AA0136.swc",
+        "params": "config/params/TC.json",
+        "protocol": "config/protocols/6ohda_protocols.json",
+        "features": "config/features/6ohda_features.json"
+    },
+    "control_quality_check": {
+        "morph_path": "morphologies/",  			 
+        "morphology": "AA0136.swc",
+        "params": "config/params/TC.json",
+        "protocol": "config/protocols/control_protocols_qc.json",
+        "features": "config/features/features_qc.json"
+    },
+    "lesioned_quality_check": {
+        "morph_path": "morphologies/",  			 
+        "morphology": "AA0136.swc",
+        "params": "config/params/TC.json",
+        "protocol": "config/protocols/6ohda_protocols_qc.json",
+        "features": "config/features/features_qc.json"
+    }
+}
