@@ -76,7 +76,7 @@ def multi_locations(sectionlist):
 def define_mechanisms(params_filename):
     """Define mechanisms"""
 
-    with open(os.path.join(os.path.dirname(__file__), params_filename)) as params_file:
+    with open(os.join(os.path.dirname(__file__), '..', params_filename)) as params_file:
         mech_definitions = json.load(
             params_file,
             object_pairs_hook=collections.OrderedDict)["mechanisms"]
@@ -103,7 +103,7 @@ def define_parameters(params_filename):
     
     parameters = []
 
-    with open(os.path.join(os.path.dirname(__file__), params_filename)) as params_file:
+    with open(os.path.join(os.path.dirname(__file__), '..', params_filename)) as params_file:
         definitions = json.load(
             params_file,
             object_pairs_hook=collections.OrderedDict)
@@ -120,7 +120,7 @@ def define_parameters(params_filename):
                 if distribution.endswith("12"):
                     scaler = CustomChannelDistribution.NrnSegmentNaDistanceScaler(19.0, 1.0)
                 elif distribution.endswith("16"):
-                    scaler = CustomChannelDistribution.NrnSegmentNaDistanceScaler(1.0, 1.0)
+                    scaler = CustomChannelDistribution.NrnSegmentNaDistanceScaler(1.0, 19.0)
                 else:
                     raise Exception()
             elif distribution.startswith("FromAxonCaT"):

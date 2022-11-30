@@ -115,7 +115,7 @@ def define_protocols(protocols_filename, stochkv_det=None,
                 runopt=False, prefix="", apical_sec=None):
     """Define protocols"""
     
-    with open(os.path.join(os.path.dirname(__file__), protocols_filename)) as protocol_file:
+    with open(os.path.join(os.path.dirname(__file__), '..', protocols_filename)) as protocol_file:
         protocol_definitions = json.load(protocol_file)
 
     if "__comment" in protocol_definitions:
@@ -374,7 +374,7 @@ class SingletonWeightObjective(EFeatureObjective):
 def define_fitness_calculator(main_protocol, features_filename, prefix=""):
     """Define fitness calculator"""
 
-    with open(os.path.join(os.path.dirname(__file__), features_filename)) as protocol_file:
+    with open(os.path.join(os.path.dirname(__file__), '..', features_filename)) as protocol_file:
         feature_definitions = json.load(protocol_file)
 
     if "__comment" in feature_definitions:
@@ -474,10 +474,10 @@ def define_fitness_calculator(main_protocol, features_filename, prefix=""):
 
     return fitcalc, efeatures
 
-def create(etype, coreneuron_active=False, use_process=False, runopt=False, altmorph=None):
+def create(etype, runopt=False, altmorph=None):
     """Setup"""
 
-    with open(os.path.join(os.path.dirname(__file__), 'config/recipes.json')) as f:
+    with open(os.path.join(os.path.dirname(__file__), '..', 'config/recipes.json')) as f:
         recipe = json.load(f)
 
     prot_path = recipe[etype]['protocol']
@@ -497,28 +497,15 @@ def create(etype, coreneuron_active=False, use_process=False, runopt=False, altm
                    if not param.frozen]
 
 
-    try:
-        nrn_sim = ephys.simulators.NrnSimulator(cvode_active=not coreneuron_active, coreneuron_active=coreneuron_active)
+    nrn_sim = ephys.simulators.NrnSimulator(cvode_active=True)
 
-        cell_eval = ephys.evaluators.CellEvaluator(
-            cell_model=cell,
-            param_names=param_names,
-            fitness_protocols=fitness_protocols,
-            fitness_calculator=fitness_calculator,
-            sim=nrn_sim,
-            use_params_for_seed=True,
-            use_process=use_process,
-            py_protocol_filename='protocol_process.py')
-    except:
-        nrn_sim = ephys.simulators.NrnSimulator(cvode_active=True)
-
-        cell_eval = ephys.evaluators.CellEvaluator(
-            cell_model=cell,
-            param_names=param_names,
-            fitness_protocols=fitness_protocols,
-            fitness_calculator=fitness_calculator,
-            sim=nrn_sim,
-            use_params_for_seed=True)
+    cell_eval = ephys.evaluators.CellEvaluator(
+        cell_model=cell,
+        param_names=param_names,
+        fitness_protocols=fitness_protocols,
+        fitness_calculator=fitness_calculator,
+        sim=nrn_sim,
+        use_params_for_seed=True)
         
     return cell_eval
 
