@@ -76,7 +76,7 @@ def multi_locations(sectionlist):
 def define_mechanisms(params_filename):
     """Define mechanisms"""
 
-    with open(os.join(os.path.dirname(__file__), '..', params_filename)) as params_file:
+    with open(os.path.join(os.path.dirname(__file__), '..', params_filename)) as params_file:
         mech_definitions = json.load(
             params_file,
             object_pairs_hook=collections.OrderedDict)["mechanisms"]
@@ -99,7 +99,7 @@ def define_mechanisms(params_filename):
 
 def define_parameters(params_filename):
     """Define parameters"""
-    import CustomChannelDistribution
+    from . import CustomChannelDistribution
     
     parameters = []
 
