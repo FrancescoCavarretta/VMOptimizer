@@ -371,6 +371,12 @@ class SingletonWeightObjective(EFeatureObjective):
         return '( %s ), weight:%f' % (self.features[0], self.weight)
 
 
+    def calculate_value(self, responses):
+        """Feature value"""
+
+        return self.calculate_feature_values(responses)[0]
+
+
 def define_fitness_calculator(main_protocol, features_filename, prefix=""):
     """Define fitness calculator"""
 

@@ -6,7 +6,6 @@ if __name__ == '__main__':
 
   param_file = sys.argv[sys.argv.index('--param_file')+1] # parameters
   response_file = sys.argv[sys.argv.index('--response_file')+1] # parameters
-  coreneuron_active = '--coreneuron' in sys.argv
   verbose = '--verbose' in sys.argv
   
   try:
@@ -45,7 +44,7 @@ if __name__ == '__main__':
     pass
   
   # create the evaluator for running the protocols
-  evaluator = CellEvalSetup.evaluator.create(etype, coreneuron_active=coreneuron_active, use_process=False)
+  evaluator = CellEvalSetup.evaluator.create(etype)
   
   # get the responses
   responses = evaluator.run_protocols(
@@ -55,4 +54,6 @@ if __name__ == '__main__':
   # store the responses
   np.save(response_file, responses, allow_pickle=True)
 
-
+  # print feature values
+  for k, v in evaluator.evaluate_with_dicts(param_dict=param, target='values').items():
+    print(k, '\t', v)

@@ -42,27 +42,31 @@ class HistoryCheck:
     # go over all the solutions
     ret = {}
     for k, param in log['history'].genealogy_history.items():
-      if numpy.max(numpy.abs(log['history'].genealogy_history[k].fitness.wvalues)) < self.max_score_thresh:
+      errors = evaluator.objective_dict(log['history'].genealogy_history[k].fitness.wvalues)
+
+      flag_err = False
+      for k_err, v_err in errors.copy().items():
+        for k_err_ref, th_err_ref in self.other_thresh.items():
+          if k_err_ref in k_err:
+            del errors[k_err]
+            if abs(v_err) > th_err_ref:
+              flag_err = flag_err or True 
+      
+      if numpy.max(numpy.abs(list(errors.values()))) > self.max_score_thresh:
         # check each error
-        errors = evaluator.objective_dict(log['history'].genealogy_history[k].fitness.wvalues)
+        flag_err = flag_err or True
 
-        flag_other_err = True
-        for k_err, v_err in errors.items():
-          for k_err_ref, th_err_ref in self.other_thresh.items():
-            if k_err_ref in k_err and abs(v_err) > th_err_ref:
-              flag_other_err = False
-
-        # pass this configuration
-        if not flag_other_err:
-          continue
+      # pass this configuration
+      if flag_err:
+        continue
               
           
-        if tuple(param) not in tracked_solution:
-          tracked_solution.add(tuple(param))
-          ret.update({(etype, k, seed):{
-            'error':errors,
-            'parameter':evaluator.param_dict(param)
-            }})
+      if tuple(param) not in tracked_solution:
+        tracked_solution.add(tuple(param))
+        ret.update({(etype, k, seed):{
+          'error':errors,
+          'parameter':evaluator.param_dict(param)
+          }})
     return ret
 
 
