@@ -44,15 +44,17 @@ class HistoryCheck:
     for k, param in log['history'].genealogy_history.items():
       errors = evaluator.objective_dict(log['history'].genealogy_history[k].fitness.wvalues)
 
+
+      _errors = errors.copy()
       flag_err = False
-      for k_err, v_err in errors.copy().items():
+      for k_err, v_err in _errors.copy().items():
         for k_err_ref, th_err_ref in self.other_thresh.items():
           if k_err_ref in k_err:
-            del errors[k_err]
+            del _errors[k_err]
             if abs(v_err) > th_err_ref:
               flag_err = flag_err or True 
       
-      if numpy.max(numpy.abs(list(errors.values()))) > self.max_score_thresh:
+      if numpy.max(numpy.abs(list(_errors.values()))) > self.max_score_thresh:
         # check each error
         flag_err = flag_err or True
 
