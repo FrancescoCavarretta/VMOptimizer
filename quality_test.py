@@ -3,6 +3,9 @@ if __name__ == '__main__':
     import os
     import sys
     import numpy as np
+    
+    print('CPUs:', multiprocessing.cpu_count())
+
     filenamein = sys.argv[sys.argv.index('--input')+1]
     filenameout = sys.argv[sys.argv.index('--output')+1]
 
@@ -12,4 +15,7 @@ if __name__ == '__main__':
     pool = multiprocessing.Pool()
     args = [ ('python3 protocol_process.py --etype %s_quality_check --param_file %s --index %d --response_file %s_%d.npy' % (cfg[i][0][0], filenamein, i, filenameout, i), ) for i in range(n) ]
     pool.starmap(os.system, args)
+    pool.close()
+    pool.join()
     pool.terminate()
+    sys.exit(0)

@@ -2,11 +2,16 @@ if __name__ == '__main__':
   import CellEvalSetup
   import numpy as np
   import sys
+  import neuron
+  neuron.h.CVode().atol(1e-8)
 
-
+  no_simulation = '--no-sim' in sys.argv
+  
   param_file = sys.argv[sys.argv.index('--param_file')+1] # parameters
-  response_file = sys.argv[sys.argv.index('--response_file')+1] # parameters
-  verbose = '--verbose' in sys.argv
+  if not no_simulation:
+    response_file = sys.argv[sys.argv.index('--response_file')+1] # parameters
+  verbose = '--verbose' in sys.argv or no_simulation
+  recalculate_errors = '--recalculate-errors' in sys.argv
   
   try:
     index = int(sys.argv[sys.argv.index('--index')+1])
@@ -36,24 +41,26 @@ if __name__ == '__main__':
       
   except:
     pass
-
-  # get eType
-  try:
-    etype = sys.argv[sys.argv.index('--etype')+1]
-  except:
-    pass
   
-  # create the evaluator for running the protocols
-  evaluator = CellEvalSetup.evaluator.create(etype)
+  if not no_simulation:
+    # get eType
+    try:
+      etype = sys.argv[sys.argv.index('--etype')+1]
+    except:
+      pass
   
-  # get the responses
-  responses = evaluator.run_protocols(
-    protocols=evaluator.fitness_protocols.values(),
-    param_values=param)
+    # create the evaluator for running the protocols
+    evaluator = CellEvalSetup.evaluator.create(etype)
+  
+    # get the responses
+    responses = evaluator.run_protocols(
+      protocols=evaluator.fitness_protocols.values(),
+      param_values=param)
 
-  # store the responses
-  np.save(response_file, responses, allow_pickle=True)
-
-  # print feature values
-  for k, v in evaluator.evaluate_with_dicts(param_dict=param, target='values').items():
-    print(k, '\t', v)
+    # store the responses
+    np.save(response_file, responses, allow_pickle=True)
+    
+    if recalculate_errors:
+    # print feature values
+      for k, v in evaluator.evaluate_with_dicts(param_dict=param, target='values').items():
+        print(k, '\t', v)
