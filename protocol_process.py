@@ -3,7 +3,7 @@ if __name__ == '__main__':
   import numpy as np
   import sys
   import neuron
-  neuron.h.CVode().atol(1e-8)
+  neuron.h.CVode().atol(1e-10)
 
   no_simulation = '--no-sim' in sys.argv
   

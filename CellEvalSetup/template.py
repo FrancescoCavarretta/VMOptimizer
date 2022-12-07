@@ -223,7 +223,7 @@ def create(recipe, etype, altmorph=None):
     """Create cell template"""
 
     if altmorph is None:
-        morph_path = os.path.join(os.path.join(recipe[etype]['morph_path'], recipe[etype]['morphology']))
+        morph_path = os.path.join(os.path.dirname(__file__), '..', recipe[etype]['morph_path'], recipe[etype]['morphology'])
     else:
         morph_path = altmorph
 

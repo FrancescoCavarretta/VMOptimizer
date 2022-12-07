@@ -186,7 +186,8 @@ class eFELFeatureExtra(eFELFeature):
             prefix='',
             t_trace_init=None,
             t_trace_end=None,
-            dt=0.025):
+            dt=0.025,
+	    force_ahp_depth=False):
 
         """Constructor
 
@@ -229,6 +230,7 @@ class eFELFeatureExtra(eFELFeature):
         self.t_trace_init = t_trace_init
         self.t_trace_end = t_trace_end
         self.dt = dt
+        self.force_ahp_depth = force_ahp_depth
 
     def get_bpo_score(self, responses):
         """Return internal score which is directly passed as a response"""
@@ -324,6 +326,16 @@ class eFELFeatureExtra(eFELFeature):
                     
                     self._setup_efel()
 
+                    if self.force_ahp_depth and self.efel_feature_name == 'AHP_depth':
+                        ahp_depth_values = efel.getFeatureValues([efel_trace], [self.efel_feature_name])[0][self.efel_feature_name]
+                        try:
+                            if np.min(ahp_depth_values) < 0:
+                                # ahp depth is not allowed to be below voltage_base
+                                efel.reset()
+                                return self.max_score
+                        except ValueError:
+                            pass
+
                     feature_value = eFELExt.getFeatureValues(efel_trace, [self.efel_feature_name])[self.efel_feature_name]
                     
                     score = abs(feature_value - self.exp_mean) / self.exp_std
@@ -411,6 +423,11 @@ def define_fitness_calculator(main_protocol, features_filename, prefix=""):
                 else:
                     weight = 1
 
+                if 'force_ahp_depth' in feature_config:
+                    force_ahp_depth = feature_config['force_ahp_depth']
+                else:
+                    force_ahp_depth = False
+
                 if 'strict_stim' in feature_config:
                     strict_stim = feature_config['strict_stim']
                 else:
@@ -467,7 +484,8 @@ def define_fitness_calculator(main_protocol, features_filename, prefix=""):
                     force_max_score = True,
                     max_score = 250,
                     t_trace_init=t_trace_init,
-                    t_trace_end=t_trace_end)
+                    t_trace_end=t_trace_end,
+                    force_ahp_depth=force_ahp_depth)
                 efeatures[feature_name] = feature
                 features.append(feature)
                 objective = SingletonWeightObjective(
