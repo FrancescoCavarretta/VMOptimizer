@@ -2,7 +2,7 @@
     "Step200_2000ms": {
         "soma.v": [
             { "feature": "AP_amplitude", "val": [ 54.97402511380059, 6.26709897136684 ], "n": 9.0, "weight": 0.5, "threshold": -20 },
-            { "feature": "AHP_depth", "val": [ 6.967619540984855, 4.1997996813008776 ], "n": 9.0, "weight": 2, "threshold": -20 },
+            { "feature": ""AHP_depth", "force_ahp_depth":true, "val": [ 6.967619540984855, 4.1997996813008776 ], "n": 9.0, "weight": 2, "threshold": -20 },
             { "feature": "AP_width", "val": [ 0.9555555555557729, 0.20069324297991717 ], "n": 9.0, "weight": 1.0, "threshold": -20 },
             { "feature": "AP_count", "val": [ 14.333333333333334, 12.922847983320084 ], "n": 9.0, "weight": 1.0, "threshold": -20 },
             { "feature": "time_to_first_spike", "val": [ 28.655555555675416, 36.05458053810041 ], "n": 9.0, "weight": 1.0, "threshold": -20 },
@@ -22,7 +22,7 @@
     "Step240_2000ms": {
         "soma.v": [
             { "feature": "AP_amplitude", "val": [ 55.10122093724741, 7.249591995687187 ], "n": 9.0, "weight": 0.5, "threshold": -20 },
-            { "feature": "AHP_depth", "val": [ 7.472603817095911, 4.741490353678518 ], "n": 9.0, "weight": 2, "threshold": -20 },
+            { "feature": ""AHP_depth", "force_ahp_depth":true, "val": [ 7.472603817095911, 4.741490353678518 ], "n": 9.0, "weight": 2, "threshold": -20 },
             { "feature": "AP_width", "val": [ 0.9333333333335455, 0.2179449471770832 ], "n": 9.0, "weight": 1.0, "threshold": -20 },
             { "feature": "AP_count", "val": [ 25.11111111111111, 12.333333333333332 ], "n": 9.0, "weight": 1.0, "threshold": -20 },
             { "feature": "time_to_first_spike", "val": [ 14.000000000116529, 11.92864200150481 ], "n": 9.0, "weight": 1.0, "threshold": -20 },
@@ -42,7 +42,7 @@
     "Step280_2000ms": {
         "soma.v": [
             { "feature": "AP_amplitude", "val": [ 55.18989186186838, 7.499908745327603 ], "n": 9.0, "weight": 0.5, "threshold": -20 },
-            { "feature": "AHP_depth", "val": [ 7.666540067824638, 5.263379523346668 ], "n": 9.0, "weight": 2, "threshold": -20 },
+            { "feature": ""AHP_depth", "force_ahp_depth":true, "val": [ 7.666540067824638, 5.263379523346668 ], "n": 9.0, "weight": 2, "threshold": -20 },
             { "feature": "AP_width", "val": [ 0.9222222222224319, 0.25385910352885466 ], "n": 9.0, "weight": 1.0, "threshold": -20 },
             { "feature": "AP_count", "val": [ 32.55555555555556, 15.240661986205776 ], "n": 9.0, "weight": 1.0, "threshold": -20 },
             { "feature": "time_to_first_spike", "val": [ 7.755555555670664, 3.1277432403863057 ], "n": 9.0, "weight": 1.0, "threshold": -20 },
