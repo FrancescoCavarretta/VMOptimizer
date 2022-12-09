@@ -1,11 +1,35 @@
+
+import CellEvalSetup
+
+def get_responses(etype, param):
+    """
+    Evaluate a set of parameters
+    """
+    
+    # create the evaluator for running the protocols
+    evaluator = CellEvalSetup.evaluator.create(etype)
+    
+    # get the responses
+    responses = evaluator.run_protocols(
+      protocols=evaluator.fitness_protocols.values(),
+      param_values=param)
+
+    # clean the memory
+    del evaluator
+
+    return responses
+
+  
 if __name__ == '__main__':
-  import CellEvalSetup
   import numpy as np
   import sys
   import neuron
-  neuron.h.CVode().atol(1e-10)
+#  neuron.h.CVode().atol(1e-10)
 
   no_simulation = '--no-sim' in sys.argv
+
+  if '--atol' in sys.argv:
+    neuron.h.CVode().atol(float(sys.argv[sys.argv.index('--atol')+1]))
   
   param_file = sys.argv[sys.argv.index('--param_file')+1] # parameters
   if not no_simulation:
@@ -49,13 +73,10 @@ if __name__ == '__main__':
     except:
       pass
   
-    # create the evaluator for running the protocols
-    evaluator = CellEvalSetup.evaluator.create(etype)
-  
-    # get the responses
-    responses = evaluator.run_protocols(
-      protocols=evaluator.fitness_protocols.values(),
-      param_values=param)
+
+    # generate responses
+    responses = {'param':param, 'responses':get_responses(etype, param), 'key':key}
+
 
     # store the responses
     np.save(response_file, responses, allow_pickle=True)
