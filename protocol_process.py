@@ -44,16 +44,19 @@ if __name__ == '__main__':
 
  # load parameters
   param = np.load(param_file, allow_pickle=True).tolist()
+  keys  = sorted(list(param.keys()))
 
   try:
     if index is None:
       index = 0
-    key, vals = list(param.items())[index]
+    key = keys[index]
+    vals = param[key]
     etype = key[0] # etypes
     param = vals['parameter']
   
     # print errors and parameters
     if verbose:
+      print(key)
       print ('Errors:')
       for x in vals['error'].items():
         print ('\t%s\t%f' % (x[0], abs(x[1])))

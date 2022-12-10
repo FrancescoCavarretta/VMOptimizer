@@ -10,11 +10,11 @@ warnings.simplefilter('ignore')
 def get_entry(data, cfg, i):
     efel_df = pd.DataFrame()
     
-    for k, r in data:
+    for k, r in data.items():
       # data
-      entry = { 'etype' :cfg[0][0],
-                'cellid':cfg[0][1],
-                'seed'  :cfg[0][2] }
+      entry = { 'etype' :cfg[0],
+                'cellid':cfg[1],
+                'seed'  :cfg[2] }
 
       # state
       entry['state'] = 'normal' if 'control' in entry['etype'] else '6ohda'
@@ -34,13 +34,15 @@ def get_entry(data, cfg, i):
       if r is None:
         print(i, 'has a none entry', k)
         return pd.DataFrame()
+
       t = r['time']
       v = r['voltage']
-
-      idx = t >= 1000
-      t = t[idx]
-      v = v[idx]
-
+      
+      # interpolation
+      tp = np.linspace(1000, 5000, 4000)
+      vp = np.interp(tp, t, v)
+      idx = tp >= 1000
+      t, v = tp[idx], vp[idx]
 
       trace = {
         'T':t,
@@ -65,20 +67,26 @@ def get_entry(data, cfg, i):
 if __name__ == '__main__':
   
 
-  filename_cfg = sys.argv[sys.argv.index('--config')+1]
+  n_cfg = int(sys.argv[sys.argv.index('--n-config')+1])
   filename_out_fmt = sys.argv[sys.argv.index('--sim-output')+1]
   filename_out_efel = sys.argv[sys.argv.index('--efel-output')+1]
-  
-  configurations = list(np.load(filename_cfg, allow_pickle=True).tolist().items())
+  if '--filter' in sys.argv:
+    filter_keys = np.load(sys.argv[sys.argv.index('--filter')+1], allow_pickle=True).tolist()
+  else:
+    filter_keys = None
 
   args = []
 
-  for i, cfg in enumerate(configurations):
-
-    data = list(np.load(filename_out_fmt % i, allow_pickle=True).tolist().items())
+  for i in range(n_cfg):
+    try:
+      data = np.load(filename_out_fmt % i, allow_pickle=True).tolist()
+    except FileNotFoundError:
+      continue
+    if filter_keys and data['key'] not in filter_keys:
+      continue
 
     # all arguments
-    args.append((data, cfg, i))
+    args.append((data['responses'], data['key'], i))
 
     print ('neuron', i, 'done')
 

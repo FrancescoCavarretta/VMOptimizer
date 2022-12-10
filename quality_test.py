@@ -2,11 +2,11 @@ from mpi4py import MPI
 import numpy as np
 import os
 
-def main(cfg, filenameout):
+def main(cfg, filenameout, no_quality_test, bias_perc):
     if MPI.COMM_WORLD.Get_rank() == 0:
         return controller(cfg, filenameout)
     else:
-        return run()
+        return run(bias_perc, no_quality_test)
 
 
 def controller(filenamein, filenameout):
@@ -40,12 +40,7 @@ def controller(filenamein, filenameout):
             
         # receive the message
         message = mpi_comm.recv()
-        print('got message!')
-        print(message)
 
-        # store on file
-        #rec_key = message['key']
-        #np.save('{filename}_{index}.npy'.format(filename=filenameout, index=str(cfg_keys.index(rec_key))), message['output'], allow_pickle=True)
         #print('file saved')
         free_ranks.append(message['rank'])
 
@@ -53,12 +48,7 @@ def controller(filenamein, filenameout):
     while len(free_ranks) < mpi_comm.Get_size() - 1:
         # receive the message
         message = mpi_comm.recv()
-        print('got message!')
-        print(message)
 
-        # store on file
-        #rec_key = message['key']
-        #np.save('{filename}_{index}.npy'.format(filename=filenameout, index=str(cfg_keys.index(rec_key))), message['output'], allow_pickle=True)
         #print('file saved')
         free_ranks.append(message['rank'])
 
@@ -69,9 +59,7 @@ def controller(filenamein, filenameout):
     print('finished')
 
 
-def run():
-    #import protocol_process
-
+def run(bias_perc, no_quality_test=False):
     mpi_comm = MPI.COMM_WORLD
 
     rank = mpi_comm.Get_rank()
@@ -83,8 +71,10 @@ def run():
         # pack output
         cfg_key = message['key']
         output = None
-        #protocol_process.get_responses(cfg_key[0] + '_quality_check', message['parameter'])
-#        os.system('python3 protocol_process.py --etype %s_quality_check --param_file %s --index %d --response_file %s_%d.npy' % (message['key'][0], message['filenamein'], message['index'], message['filenameout'], message['index']))
+        if no_quality_test:
+            os.system('python3 protocol_process.py --etype %s --param_file %s --index %d --response_file %s_%d.npy' % (message['key'][0], message['filenamein'], message['index'], message['filenameout'], message['index']))
+        else:
+            os.system('python3 protocol_process.py --etype %s_quality_check_%d --param_file %s --index %d --response_file %s_%d.npy' % (message['key'][0], bias_perc, message['filenamein'], message['index'], message['filenameout'], message['index']))
         dict_message = dict(output=output, rank=rank, key=cfg_key)
 
         # send out
@@ -102,9 +92,13 @@ if __name__ == '__main__':
 
     filenamein = sys.argv[sys.argv.index('--input')+1]
     filenameout = sys.argv[sys.argv.index('--output')+1]
-
+    no_quality_test = '--no-quality' in sys.argv
+    if no_quality_test:
+      bias_perc = None
+    else:
+      bias_perc = int(sys.argv[sys.argv.index('--bias-perc')+1])
     
-    main(filenamein, filenameout)
+    main(filenamein, filenameout, no_quality_test, bias_perc)
 
     sys.exit(0)
 
