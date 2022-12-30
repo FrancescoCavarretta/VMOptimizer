@@ -72,9 +72,9 @@ def run(bias_perc, no_quality_test=False):
         cfg_key = message['key']
         output = None
         if no_quality_test:
-            os.system('python3 protocol_process.py --etype %s --param_file %s --index %d --response_file %s_%d.npy' % (message['key'][0], message['filenamein'], message['index'], message['filenameout'], message['index']))
+            os.system('python3 protocol_process.py --atol 1e-4 --etype %s --param_file %s --index %d --response_file %s_%d.npy' % (message['key'][0], message['filenamein'], message['index'], message['filenameout'], message['index']))
         else:
-            os.system('python3 protocol_process.py --etype %s_quality_check_%d --param_file %s --index %d --response_file %s_%d.npy' % (message['key'][0], bias_perc, message['filenamein'], message['index'], message['filenameout'], message['index']))
+            os.system('python3 protocol_process.py --atol 1e-4 --etype %s_quality_check_%d --param_file %s --index %d --response_file %s_%d.npy' % (message['key'][0], bias_perc, message['filenamein'], message['index'], message['filenameout'], message['index']))
         dict_message = dict(output=output, rank=rank, key=cfg_key)
 
         # send out

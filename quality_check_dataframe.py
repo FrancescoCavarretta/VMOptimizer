@@ -7,7 +7,9 @@ import warnings
 
 warnings.simplefilter('ignore')
 
-def get_entry(data, cfg, i):
+def get_entry(filename, i):
+    r = np.load(filename, allow_pickle=True).tolist()
+    data, cfg = r['responses'], r['key']
     efel_df = pd.DataFrame()
     
     for k, r in data.items():
@@ -81,19 +83,20 @@ if __name__ == '__main__':
     try:
       data = np.load(filename_out_fmt % i, allow_pickle=True).tolist()
     except FileNotFoundError:
+      print ('neuron', i, 'done')
       continue
     if filter_keys and data['key'] not in filter_keys:
       continue
 
     # all arguments
-    args.append((data['responses'], data['key'], i))
+    args.append((filename_out_fmt % i, i))
 
-    print ('neuron', i, 'done')
+    #print ('neuron', i, 'done')
 
 
   efel_df = pd.DataFrame()
   pool = multiprocessing.Pool()
-  results = pool.starmap(get_entry, args)
+  results = pool.starmap(get_entry, args, chunksize=int(n_cfg / multiprocessing.cpu_count()))
   
   for i, entry in enumerate(results):
     efel_df = pd.concat([efel_df, entry])
