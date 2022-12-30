@@ -39,7 +39,7 @@
             {"name":"ena",                   "val":69},
             {"name":"ek",                    "val":-105},
 	    {"name":"e_pas",                 "val":[-85,-60]},
-            {"name":"gh_max_TC_ih_Bud97",    "val":[0, 0.00015], "dist":"FromAxonH"}
+            {"name":"gh_max_TC_ih_Bud97",    "val":[0, 0.00015], "dist":"FromAxonH"},
             {"name":"g_pas",                 "val":[1e-07, 1e-04]},
             {"name":"gnap_max_TC_HH",        "val":[0, 0.00085],    "dist":"FromAxonNav16"},
             {"name":"gna_max_TC_HH",         "val":[0, 0.02],       "dist":"FromAxonNav12"},
