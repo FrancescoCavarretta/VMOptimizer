@@ -6,7 +6,7 @@ NEURON {
 	SUFFIX TC_HH
 	USEION na READ ena WRITE ina
 	USEION k READ ek WRITE ik
-	RANGE gna_max, gk_max, gnap_max
+	RANGE gna_max, gk_max, gnap_max, gna_max_extra, gnap_max_extra, gk_max_extra
 	RANGE m_inf, h_inf, n_inf, mp_inf, hp_inf
 	RANGE tau_m, tau_h, tau_n, tau_mp, tau_hp
 	RANGE ina, ik
@@ -29,7 +29,11 @@ UNITS {
 PARAMETER {
 	gna_max	= 1.0e-1 	(S/cm2) 
 	gnap_max	= 1.0e-1 	(S/cm2) 
-	gk_max	= 1.0e-1 	(S/cm2) 
+	gk_max	= 1.0e-1 	(S/cm2)
+        
+	gna_max_extra	= 0 	(S/cm2) 
+	gnap_max_extra	= 0 	(S/cm2) 
+	gk_max_extra	= 0 	(S/cm2) 
 
 	celsius         (degC)
 	dt              (ms)
@@ -79,9 +83,10 @@ ASSIGNED {
 BREAKPOINT {
 	SOLVE states METHOD cnexp
 
-        output_nat = gna_max  * m*m*m*h
-        output_nap = gnap_max * mp*mp*mp*hp 
-        output_k   = gk_max   * n*n*n*n 
+        output_nat = (gna_max + gna_max_extra) * m*m*m*h
+        output_nap = (gnap_max + gnap_max_extra) * mp*mp*mp*hp 
+        output_k   = (gk_max + gk_max_extra) * n*n*n*n
+        
         i_output_nat  = output_nat*(v - ena)
         i_output_nap  = output_nap*(v - ena)
         i_output_na   = i_output_nat + i_output_nap
@@ -113,9 +118,10 @@ INITIAL {
 	hp = hp_inf
 	n = n_inf
 
-        output_nat = gna_max  * m*m*m*h
-        output_nap = gnap_max * mp*mp*mp*hp 
-        output_k   = gk_max   * n*n*n*n 
+        output_nat = (gna_max + gna_max_extra) * m*m*m*h
+        output_nap = (gnap_max + gnap_max_extra) * mp*mp*mp*hp 
+        output_k   = (gk_max + gk_max_extra) * n*n*n*n
+        
         i_output_nat  = output_nat *(v - ena)
         i_output_nap  = output_nap *(v - ena)
         i_output_na   = i_output_nat + i_output_nap

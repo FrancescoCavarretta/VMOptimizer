@@ -15,6 +15,7 @@ NEURON {
     
     RANGE gion                           
     RANGE gmax                              : Will be changed when ion channel mechanism placed on cell!
+    RANGE gmax_extra                        : Extra conductance
     RANGE conductance                       : parameter
 
     
@@ -49,7 +50,7 @@ NEURON {
     RANGE gmin
     RANGE shift
 
-    RANGE m_min
+    :RANGE m_min
     
     RANGE i_output                            
     RANGE output
@@ -78,7 +79,7 @@ PARAMETER {
     
     gmax = 0  (S/cm2)                       : Will be changed when ion channel mechanism placed on cell!
     gmin = 0  (S/cm2)
-    
+    gmax_extra = 0 (S/cm2)   
     conductance = 1.0E-5 (uS)
     m_instances = 1 
     m_timeCourse_TIME_SCALE = 1 (ms)
@@ -131,7 +132,7 @@ ASSIGNED {
     
     rate_m_q (/ms)
 
-    m_min
+    :m_min
 
 
 
@@ -153,12 +154,12 @@ INITIAL {
     rates() ? To ensure correct initialisation.
     
     m_q = m_inf
-    m_min = gmin/gmax
+    :m_min = gmin/gmax
 
 
 
 
-    output   = gmax * (m_min+m_q)
+    output   = (gmax + gmax_extra) * m_q + gmin
     i_output = output * (v - ek)
 
     ik = i_output
@@ -190,7 +191,7 @@ BREAKPOINT {
 
     
 
-    output   = gmax * (m_min+m_q)
+    output   = (gmax + gmax_extra) * m_q + gmin
     i_output = output * (v - ek)
 
     ik = i_output
