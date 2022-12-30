@@ -118,9 +118,9 @@ def define_parameters(params_filename):
         if distribution.startswith("FromAxon"):
             if distribution.startswith("FromAxonNa"):
                 if distribution.endswith("12"):
-                    scaler = CustomChannelDistribution.NrnSegmentNaDistanceScaler(19.0, 1.0)
+                    scaler = CustomChannelDistribution.NrnSegmentNaDistanceScaler(1.0, 1.0)
                 elif distribution.endswith("16"):
-                    scaler = CustomChannelDistribution.NrnSegmentNaDistanceScaler(1.0, 19.0)
+                    scaler = CustomChannelDistribution.NrnSegmentNaDistanceScaler(1.0, 1.0)
                 else:
                     raise Exception()
             elif distribution.startswith("FromAxonCaT"):
