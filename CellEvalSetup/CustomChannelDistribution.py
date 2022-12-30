@@ -35,6 +35,12 @@ class NrnSegmentAxonDistanceScaler(ParameterScaler, DictMixin):
 
     def scale(self, value, segment, sim=None):
         """Scale a value based on a segment"""
+        if isinstance(value, dict):
+            value = value["value"]
+        else:
+            value = value
+
+        """Scale a value based on a segment"""
         ## if it is not an axon, then it is the same coefficient as proximal
         secname = sim.neuron.h.secname(sec=segment.sec)
         if "axon" in secname:
@@ -105,6 +111,13 @@ class NrnSegmentNaDistanceScaler(ParameterScaler, DictMixin):
 
     def scale(self, value, segment, sim=None):
         """Scale a value based on a segment"""
+        if isinstance(value, dict):
+            value = value["value"]
+        else:
+            value = value
+
+
+        """Scale a value based on a segment"""
         ## if it is not an axon, then it is the same coefficient as proximal
         secname = sim.neuron.h.secname(sec=segment.sec)
         if "axon" in secname:
@@ -156,6 +169,12 @@ class NrnSegmentCaTDistanceScaler(ParameterScaler, DictMixin):
                 
 
     def scale(self, value, segment, sim=None):
+        """Scale a value based on a segment"""
+        if isinstance(value, dict):
+            value = value["value"]
+        else:
+            value = value
+
         """Scale a value based on a segment"""
         ## if it is not an axon, then it is the same coefficient as proximal
         secname = sim.neuron.h.secname(sec=segment.sec)
@@ -209,6 +228,13 @@ class NrnSegmentCaLDistanceScaler(ParameterScaler, DictMixin):
                 
 
     def scale(self, value, segment, sim=None):
+        """Scale a value based on a segment"""
+        if isinstance(value, dict):
+            value = value["value"]
+        else:
+            value = value
+
+
         """Scale a value based on a segment"""
         ## if it is not an axon, then it is the same coefficient as proximal
         secname = sim.neuron.h.secname(sec=segment.sec)
