@@ -6,6 +6,6 @@ filenameout = sys.argv[sys.argv.index('--output')+1]
 data = np.load(filenamein, allow_pickle=True).tolist()
 
 for v in data.values():
-  v['parameter']['gmax_iM.all'] *= 0.7
+  v['parameter']['gmax_iM.all'] *= 0.3
 
 np.save(filenameout, data, allow_pickle=True)
