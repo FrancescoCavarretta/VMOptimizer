@@ -8,10 +8,11 @@ import warnings
 warnings.simplefilter('ignore')
 
 def get_entry(filename, i):
+#    print(filename, i)
     r = np.load(filename, allow_pickle=True).tolist()
     data, cfg = r['responses'], r['key']
     efel_df = pd.DataFrame()
-    
+#    print(r)    
     for k, r in data.items():
       # data
       entry = { 'etype' :cfg[0],
@@ -57,11 +58,11 @@ def get_entry(filename, i):
       eFELExt.efel.setThreshold(-20.0 if entry['protocol']  == 'fi' else -35)
 
       # extract features
-      entry.update( eFELExt.getFeatureValues(trace, ['AP_count', 'AP_count_before_stim', 'AP_count_after_stim', 'voltage_base', 'voltage_after_stim']) )
+      entry.update( eFELExt.getFeatureValues(trace, ['AP_count', 'AP_count_before_stim', 'AP_count_after_stim', 'voltage_base', 'voltage_after_stim', 'voltage_deflection']) )
 
       # append
       efel_df = pd.concat([efel_df, pd.DataFrame(entry, index=[0])])
-
+#    print(efel_df)
     return efel_df
 
 
@@ -95,8 +96,11 @@ if __name__ == '__main__':
 
 
   efel_df = pd.DataFrame()
-  pool = multiprocessing.Pool()
-  results = pool.starmap(get_entry, args, chunksize=int(n_cfg / multiprocessing.cpu_count()))
+  pool = multiprocessing.Pool(1)
+  chunksize = int(n_cfg / multiprocessing.cpu_count())
+  if chunksize == 0: 
+    chunksize = 1
+  results = pool.starmap(get_entry, args, chunksize=chunksize)
   
   for i, entry in enumerate(results):
     efel_df = pd.concat([efel_df, entry])

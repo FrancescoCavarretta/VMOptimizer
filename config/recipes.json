@@ -30,28 +30,28 @@
     "control_136_quality_check_100": {
         "morph_path": "morphologies/",
         "morphology": "AA0136.swc",
-        "params": "config/params/TC.json",
+        "params": "config/params/TC2.json",
         "protocol": "config/protocols/control_protocols_qc_100.json",
         "features": "config/features/features_qc.json"
     },
     "lesioned_136_quality_check_100": {
         "morph_path": "morphologies/",
         "morphology": "AA0136.swc",
-        "params": "config/params/TC.json",
+        "params": "config/params/TC2.json",
         "protocol": "config/protocols/6ohda_protocols_qc_100.json",
         "features": "config/features/features_qc.json"
     },
     "control_136_quality_check_90": {
         "morph_path": "morphologies/",
         "morphology": "AA0136.swc",
-        "params": "config/params/TC.json",
+        "params": "config/params/TC2.json",
         "protocol": "config/protocols/control_protocols_qc_90.json",
         "features": "config/features/features_qc.json"
     },
     "lesioned_136_quality_check_90": {
         "morph_path": "morphologies/",
         "morphology": "AA0136.swc",
-        "params": "config/params/TC.json",
+        "params": "config/params/TC2.json",
         "protocol": "config/protocols/6ohda_protocols_qc_90.json",
         "features": "config/features/features_qc.json"
     },
@@ -128,14 +128,14 @@
     "control_719_quality_check_100": {
         "morph_path": "morphologies/",
         "morphology": "AA0719.swc",
-        "params": "config/params/TC.json",
+        "params": "config/params/TC2.json",
         "protocol": "config/protocols/control_protocols_qc_100.json",
         "features": "config/features/features_qc.json"
     },
     "lesioned_719_quality_check_100": {
         "morph_path": "morphologies/",
         "morphology": "AA0719.swc",
-        "params": "config/params/TC.json",
+        "params": "config/params/TC2.json",
         "protocol": "config/protocols/6ohda_protocols_qc_100.json",
         "features": "config/features/features_qc.json"
     },
