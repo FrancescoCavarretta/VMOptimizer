@@ -53,7 +53,7 @@
             { "feature": "voltage_base", "val": [ -68.21168862805159, 1.7935908756252132 ], "n": 7.0, "weight": 1.0, "t_trace_init": 500, "threshold": -20 },
             { "feature": "voltage_after_stim", "val": [ -72.38118041748457, 2.484011758169466 ], "n": 7.0, "weight": 1.0, "t_trace_init": 500, "threshold": -20 },
             { "feature": "AP_count_before_stim", "val": [ 0.0, 0.01 ], "n": 7.0, "weight": 1.0, "t_trace_init": 500, "threshold": -20 },
-            { "feature": "AP_count_after_stim", "val": [ 0.42857142857142855, 0.01 ], "n": 7.0, "weight": 1.0, "t_trace_init": 500, "threshold": -20 },
+            { "feature": "AP_count_after_stim", "val": [ 0.0, 0.01 ], "n": 7.0, "weight": 1.0, "t_trace_init": 500, "threshold": -20 },
             { "feature": "max_amp_difference", "val": [ 4.427496604483847, 4.8970953407981925 ], "n": 7.0, "weight": 1.0, "t_trace_init": 500, "threshold": -20 },
             { "feature": "clustering_index", "val": [ 0.7790559707852941, 0.1287096381200868 ], "n": 7.0, "weight": 1.0, "t_trace_init": 500, "threshold": -20 },
             { "feature": "fast_AHP", "val": [ 8.3320055148617, 4.216345974890766 ], "n": 7.0, "weight": 1.0, "t_trace_init": 500, "threshold": -20 }
