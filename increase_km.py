@@ -5,15 +5,18 @@ filenameout = sys.argv[sys.argv.index('--output')+1]
 
 data = np.load(filenamein, allow_pickle=True).tolist()
 
-'''for k in list(data.keys()):
-  if k[0].startswith('lesioned'):
-    data[k]['parameter']['gmax_iM.all'] *= 37.1
-  else:
-    del data[k]'''
+#for k in list(data.keys()):
+#  if k[0].startswith('control'):
+#    del data[k]
+
+gm_6ohda = np.mean([ data[k]['parameter']['gmax_iM.all'] for k in data.keys() if k[0].startswith('lesioned') ])
+gm_control = np.mean([ data[k]['parameter']['gmax_iM.all'] for k in data.keys() if k[0].startswith('control') ])
+factor = gm_control / gm_6ohda
+print('factor', factor)
 
 for k in list(data.keys()):
   if k[0].startswith('lesioned'):
-    data[k]['parameter']['gmax_iM.all'] *= 37.1 * 1.25
+    data[k]['parameter']['gmax_iM.all'] *= factor * 1.25
   else:
     del data[k]
 
