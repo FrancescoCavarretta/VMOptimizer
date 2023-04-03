@@ -96,7 +96,7 @@ if __name__ == '__main__':
 
 
   efel_df = pd.DataFrame()
-  pool = multiprocessing.Pool(1)
+  pool = multiprocessing.Pool()
   chunksize = int(n_cfg / multiprocessing.cpu_count())
   if chunksize == 0: 
     chunksize = 1
