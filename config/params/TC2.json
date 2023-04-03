@@ -49,7 +49,7 @@
 	    {"name":"pcabar1_TC_iL",         "val":[0, 0.00075],     "dist":"FromAxonCaL"  },
 	    {"name":"pcabar2_TC_iL",         "val":[0, 0.00125],     "dist":"FromAxonCaL"  },
 	    {"name":"gSK_E2bar_SK_E2",       "val":[0, 0.00275],     "dist":"FromAxonCaL"  },
-            {"name":"gmax_iM",               "val":[0, 0.0012]},
+            {"name":"gmax_iM",               "val":[0, 0.0024]},
             {"name":"gmin_iM",               "val":[0, 0.00006]},
             {"name":"gk_max_TC_iD",          "val":[0, 0.0003]},
 	    {"name":"gbar_BK",               "val":[0, 0.02],       "dist":"FromAxonCaL"  },
