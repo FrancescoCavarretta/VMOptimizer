@@ -58,7 +58,7 @@ def get_entry(filename, i):
       eFELExt.efel.setThreshold(-20.0 if entry['protocol']  == 'fi' else -35)
 
       # extract features
-      entry.update( eFELExt.getFeatureValues(trace, ['AP_count', 'AP_count_before_stim', 'AP_count_after_stim', 'voltage_base', 'voltage_after_stim', 'voltage_deflection']) )
+      entry.update( eFELExt.getFeatureValues(trace, ['adaptation_index2', 'AP_count', 'AP_count_before_stim', 'AP_count_after_stim', 'voltage_base', 'voltage_after_stim', 'voltage_deflection', 'AP_amplitude', 'AP1_amp', 'AP2_amp', 'fast_AHP', 'AHP_depth', 'AP_amplitude_change', 'sag_amplitude']) )
 
       # append
       efel_df = pd.concat([efel_df, pd.DataFrame(entry, index=[0])])
@@ -84,7 +84,7 @@ if __name__ == '__main__':
     try:
       data = np.load(filename_out_fmt % i, allow_pickle=True).tolist()
     except FileNotFoundError:
-      print ('neuron', i, 'done')
+      print ('neuron', i, 'done with error')
       continue
     if filter_keys and data['key'] not in filter_keys:
       continue
@@ -92,7 +92,7 @@ if __name__ == '__main__':
     # all arguments
     args.append((filename_out_fmt % i, i))
 
-    #print ('neuron', i, 'done')
+    print ('neuron', i, 'done')
 
 
   efel_df = pd.DataFrame()

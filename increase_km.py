@@ -12,11 +12,12 @@ data = np.load(filenamein, allow_pickle=True).tolist()
 gm_6ohda = np.mean([ data[k]['parameter']['gmax_iM.all'] for k in data.keys() if k[0].startswith('lesioned') ])
 gm_control = np.mean([ data[k]['parameter']['gmax_iM.all'] for k in data.keys() if k[0].startswith('control') ])
 factor = gm_control / gm_6ohda
+factor = 40
 print('factor', factor)
 
 for k in list(data.keys()):
   if k[0].startswith('lesioned'):
-    data[k]['parameter']['gmax_iM.all'] *= factor * 1.25
+    data[k]['parameter']['gmax_iM.all'] *= factor 
   else:
     del data[k]
 
